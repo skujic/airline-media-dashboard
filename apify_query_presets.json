@@ -1,0 +1,64 @@
+{
+  "historical_12m": {
+    "Wizz Air UK": [
+      "\"Wizz Air UK\" after:2025-03-19"
+    ],
+    "Wizz Air": [
+      "\"Wizz Air\" after:2025-03-19"
+    ],
+    "Ryanair": [
+      "\"Ryanair\" after:2025-03-19"
+    ],
+    "easyJet": [
+      "\"easyJet\" after:2025-03-19"
+    ],
+    "British Airways": [
+      "\"British Airways\" after:2025-03-19"
+    ],
+    "Jet2": [
+      "\"Jet2\" after:2025-03-19"
+    ],
+    "TUI Airways": [
+      "\"TUI Airways\" after:2025-03-19"
+    ],
+    "Loganair": [
+      "\"Loganair\" after:2025-03-19"
+    ]
+  },
+  "daily_24h": {
+    "Wizz Air UK": [
+      "\"Wizz Air UK\" after:2026-03-18"
+    ],
+    "Wizz Air": [
+      "\"Wizz Air\" after:2026-03-18"
+    ],
+    "Ryanair": [
+      "\"Ryanair\" after:2026-03-18"
+    ],
+    "easyJet": [
+      "\"easyJet\" after:2026-03-18"
+    ],
+    "British Airways": [
+      "\"British Airways\" after:2026-03-18"
+    ],
+    "Jet2": [
+      "\"Jet2\" after:2026-03-18"
+    ],
+    "TUI Airways": [
+      "\"TUI Airways\" after:2026-03-18"
+    ],
+    "Loganair": [
+      "\"Loganair\" after:2026-03-18"
+    ]
+  },
+  "countries_to_run": [
+    "GB",
+    "US",
+    "DE",
+    "AE"
+  ],
+  "notes": [
+    "Run each query in multiple country indexes for wider coverage.",
+    "Use GB and US as the default minimum pair. Add DE and AE for more European / Middle East coverage."
+  ]
+}
