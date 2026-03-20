@@ -9,13 +9,18 @@
     --bg: #0b1020;
     --panel: #121933;
     --panel-2: #1a2245;
+    --panel-3: #18213f;
     --text: #eef2ff;
     --muted: #a7b0d6;
     --accent: #7dd3fc;
     --accent-2: #86efac;
     --accent-3: #f9a8d4;
+    --accent-4: #fde68a;
+    --danger: #fca5a5;
     --border: #2a3568;
     --chip: #202a54;
+    --good-bg: rgba(134,239,172,0.12);
+    --bad-bg: rgba(252,165,165,0.12);
   }
   * { box-sizing: border-box; }
   body {
@@ -25,7 +30,7 @@
     color: var(--text);
   }
   a { color: var(--accent); text-decoration: none; }
-  .wrap { max-width: 1400px; margin: 0 auto; padding: 20px; }
+  .wrap { max-width: 1480px; margin: 0 auto; padding: 20px; }
   .panel {
     background: rgba(18, 25, 51, 0.96);
     border: 1px solid var(--border);
@@ -34,8 +39,8 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.24);
   }
   .hero { margin-bottom: 16px; }
-  .title { font-size: 28px; font-weight: 800; margin: 0 0 8px; }
-  .subtitle { color: var(--muted); line-height: 1.45; margin: 0; }
+  .title { font-size: 30px; font-weight: 800; margin: 0 0 8px; }
+  .subtitle { color: var(--muted); line-height: 1.5; margin: 0; }
   .statusbar {
     margin-top: 12px;
     padding: 10px 12px;
@@ -45,9 +50,29 @@
     color: var(--muted);
     font-size: 13px;
   }
+  .hero-top {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .hero-badges {
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  .hero-badge, .chip {
+    background: var(--chip);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
   .controls {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0,1fr));
+    grid-template-columns: repeat(6, minmax(0,1fr));
     gap: 12px;
     margin: 16px 0;
   }
@@ -67,6 +92,7 @@
     background: var(--panel-2);
     border: 1px solid var(--border);
     cursor:pointer;
+    user-select:none;
   }
   .tab.active { background: #1f3b62; }
   .hidden { display:none; }
@@ -82,31 +108,34 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 16px;
-    min-height: 96px;
+    min-height: 108px;
   }
   .kpi .label { color: var(--muted); font-size: 12px; }
   .kpi .value { font-size: 28px; font-weight: 800; margin-top: 6px; line-height: 1.15; }
   .kpi .value.smallish { font-size: 18px; }
-
+  .delta {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .delta.good { color: var(--accent-2); }
+  .delta.bad { color: var(--danger); }
   .grid {
     display:grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 16px;
   }
+  .grid-3 {
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:16px;
+    margin-bottom:16px;
+  }
   .chart { min-height: 320px; }
-  .chart svg { width: 100%; height: 280px; display:block; }
+  .chart svg { width: 100%; height: 300px; display:block; }
 
   .legend { display:flex; gap:8px; flex-wrap: wrap; margin-top: 8px; }
-  .chip {
-    background: var(--chip);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 999px;
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
   table { width:100%; border-collapse: collapse; }
   th, td {
     text-align:left;
@@ -114,7 +143,8 @@
     border-bottom: 1px solid var(--border);
     vertical-align: top;
   }
-  th { color: var(--muted); font-size: 12px; }
+  th { color: var(--muted); font-size: 12px; position: sticky; top: 0; background: rgba(18,25,51,0.98); }
+  .table-wrap { max-height: 460px; overflow:auto; }
   .cards { display:grid; gap: 12px; }
   .card {
     background: var(--panel);
@@ -122,7 +152,7 @@
     border-radius: 16px;
     padding: 16px;
   }
-  .meta { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+  .meta { color: var(--muted); font-size: 12px; margin-bottom: 8px; line-height:1.45; }
   .article-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .small { font-size: 12px; color: var(--muted); }
   .tag {
@@ -135,6 +165,9 @@
     font-size: 11px;
     color: var(--text);
   }
+  .tag.good { background: rgba(134,239,172,0.16); }
+  .tag.warn { background: rgba(253,230,138,0.16); }
+  .tag.bad { background: rgba(252,165,165,0.16); }
   .spike-list { display:grid; gap:10px; }
   .spike-item {
     background: var(--panel-2);
@@ -144,26 +177,43 @@
   }
   .spike-title { font-weight: 700; }
   .muted { color: var(--muted); }
+  .footer { padding: 0 6px 18px; color: var(--muted); font-size: 12px; }
+  .right { text-align:right; }
+  .mono { font-variant-numeric: tabular-nums; }
+  .good { color: var(--accent-2); }
+  .bad { color: var(--danger); }
+  .center { text-align:center; }
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1440px) {
     .kpis { grid-template-columns: repeat(6, minmax(0,1fr)); }
   }
   @media (max-width: 1200px) {
-    .kpis { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .controls { grid-template-columns: repeat(3, minmax(0,1fr)); }
   }
   @media (max-width: 1100px) {
-    .grid, .controls { grid-template-columns: 1fr; }
+    .grid, .grid-3, .controls { grid-template-columns: 1fr; }
   }
-  @media (max-width: 700px) {
+  @media (max-width: 720px) {
     .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .hero-top { display:block; }
+    .hero-badges { margin-top: 10px; justify-content:flex-start; }
+    .title { font-size: 26px; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="hero panel">
-    <h1 class="title">Airline Recruitment Intelligence</h1>
-    <p class="subtitle">Live dashboard for Wizz Air UK, Wizz Air, and competitor media coverage with recruitment-first analysis.</p>
+    <div class="hero-top">
+      <div>
+        <h1 class="title">Airline Recruitment Intelligence</h1>
+        <p class="subtitle">Live dashboard for Wizz Air UK, Wizz Air, and competitor media coverage with recruitment-first analysis, recruitment signal logic, gap tracking, 7-day movement, and spike detection.</p>
+      </div>
+      <div class="hero-badges">
+        <div class="hero-badge" id="badgeRows">0 rows</div>
+        <div class="hero-badge" id="badgeUpdated">Not loaded</div>
+      </div>
+    </div>
     <div class="statusbar" id="dataStatus">Loading data…</div>
     <div class="tabs">
       <div class="tab active" data-tab="dashboard">Dashboard</div>
@@ -193,6 +243,14 @@
       </select>
     </div>
     <div>
+      <label>Signal source</label>
+      <select id="signalSourceFilter">
+        <option value="All">All</option>
+        <option value="Manual">Manual</option>
+        <option value="Inferred">Inferred</option>
+      </select>
+    </div>
+    <div>
       <label>Time window</label>
       <select id="timeWindow">
         <option value="all">All loaded data</option>
@@ -206,38 +264,50 @@
 
   <div id="dashboard" class="tab-panel">
     <div class="kpis">
-      <div class="kpi"><div class="label">Articles</div><div class="value" id="kpiArticles">0</div></div>
-      <div class="kpi"><div class="label">Wizz Total</div><div class="value" id="kpiWizz">0</div></div>
-      <div class="kpi"><div class="label">Wizz Air UK</div><div class="value" id="kpiWizzUK">0</div></div>
-      <div class="kpi"><div class="label">Wizz Air</div><div class="value" id="kpiWizzMain">0</div></div>
-      <div class="kpi"><div class="label">Other Airlines</div><div class="value" id="kpiOther">0</div></div>
-      <div class="kpi"><div class="label">Wizz Share %</div><div class="value" id="kpiWizzShare">0%</div></div>
-      <div class="kpi"><div class="label">Competitor Share %</div><div class="value" id="kpiCompShare">0%</div></div>
-      <div class="kpi"><div class="label">Top Airline</div><div class="value smallish" id="kpiTopAirline">–</div></div>
-      <div class="kpi"><div class="label">Gap vs Top Competitor</div><div class="value smallish" id="kpiGap">–</div></div>
-      <div class="kpi"><div class="label">Recruitment Articles</div><div class="value" id="kpiRecruitArticles">0</div></div>
-      <div class="kpi"><div class="label">Recruitment Share %</div><div class="value" id="kpiRecruitShare">0%</div></div>
-      <div class="kpi"><div class="label">Top theme</div><div class="value smallish" id="kpiTopTheme">–</div></div>
+      <div class="kpi"><div class="label">Articles</div><div class="value mono" id="kpiArticles">0</div><div class="delta" id="kpiArticlesDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz Total</div><div class="value mono" id="kpiWizz">0</div><div class="delta" id="kpiWizzDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz Air UK</div><div class="value mono" id="kpiWizzUK">0</div><div class="delta" id="kpiWizzUKDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz Air</div><div class="value mono" id="kpiWizzMain">0</div><div class="delta" id="kpiWizzMainDelta">–</div></div>
+      <div class="kpi"><div class="label">Other Airlines</div><div class="value mono" id="kpiOther">0</div><div class="delta" id="kpiOtherDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz Share %</div><div class="value mono" id="kpiWizzShare">0%</div><div class="delta" id="kpiShareDelta">–</div></div>
+      <div class="kpi"><div class="label">Recruitment Articles</div><div class="value mono" id="kpiRecruitArticles">0</div><div class="delta" id="kpiRecruitDelta">–</div></div>
+      <div class="kpi"><div class="label">Recruitment Share %</div><div class="value mono" id="kpiRecruitShare">0%</div><div class="delta" id="kpiRecruitShareDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz Recruit Share %</div><div class="value mono" id="kpiWizzRecruitShare">0%</div><div class="delta" id="kpiWizzRecruitDelta">–</div></div>
+      <div class="kpi"><div class="label">Top Airline</div><div class="value smallish" id="kpiTopAirline">–</div><div class="delta" id="kpiTopAirlineMeta">–</div></div>
+      <div class="kpi"><div class="label">Gap vs Top Competitor</div><div class="value smallish" id="kpiGap">–</div><div class="delta" id="kpiGapRecruit">–</div></div>
+      <div class="kpi"><div class="label">Signal Coverage</div><div class="value smallish" id="kpiSignalMix">–</div><div class="delta" id="kpiTopTheme">–</div></div>
     </div>
 
     <div class="grid">
       <div class="panel chart">
-        <div style="font-weight:800; margin-bottom:10px;">Monthly volume: Wizz vs Other airlines</div>
-        <svg id="monthChart" viewBox="0 0 700 280"></svg>
+        <div style="font-weight:800; margin-bottom:10px;">Monthly volume: Wizz vs other airlines</div>
+        <svg id="monthChart" viewBox="0 0 760 300"></svg>
         <div class="small">Counts are based on loaded articles and the selected filters.</div>
       </div>
       <div class="panel chart">
-        <div style="font-weight:800; margin-bottom:10px;">Theme mix</div>
-        <svg id="themeChart" viewBox="0 0 700 280"></svg>
-        <div class="legend" id="themeLegend"></div>
+        <div style="font-weight:800; margin-bottom:10px;">Monthly recruitment signal: Wizz vs other airlines</div>
+        <svg id="recruitMonthChart" viewBox="0 0 760 300"></svg>
+        <div class="small">YES recruitment signals only.</div>
       </div>
     </div>
 
     <div class="grid">
       <div class="panel chart">
+        <div style="font-weight:800; margin-bottom:10px;">Theme mix</div>
+        <svg id="themeChart" viewBox="0 0 760 300"></svg>
+        <div class="legend" id="themeLegend"></div>
+      </div>
+      <div class="panel chart">
         <div style="font-weight:800; margin-bottom:10px;">Daily trend: last 7 days</div>
-        <svg id="dailyChart" viewBox="0 0 700 280"></svg>
+        <svg id="dailyChart" viewBox="0 0 760 300"></svg>
         <div class="small">Shows article counts by day for Wizz vs other airlines.</div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="panel">
+        <div style="font-weight:800; margin-bottom:10px;">Competitor leaderboard</div>
+        <div class="table-wrap"><table id="leaderboardTable"></table></div>
       </div>
       <div class="panel">
         <div style="font-weight:800; margin-bottom:10px;">Spike detection</div>
@@ -259,15 +329,23 @@
 
   <div id="articles" class="tab-panel hidden">
     <div class="panel">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
         <div style="font-weight:800;">Filtered article list</div>
-        <input type="text" id="searchBox" placeholder="Search title or description" style="max-width:340px;" />
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <input type="text" id="searchBox" placeholder="Search title or description" style="max-width:340px;" />
+          <select id="sortBy" style="max-width:220px;">
+            <option value="date_desc">Newest first</option>
+            <option value="date_asc">Oldest first</option>
+            <option value="company_asc">Company A–Z</option>
+            <option value="theme_asc">Theme A–Z</option>
+          </select>
+        </div>
       </div>
-      <table id="articlesTable"></table>
+      <div class="table-wrap"><table id="articlesTable"></table></div>
     </div>
   </div>
 
-  <div class="footer">Connected to Google Sheets live feed.</div>
+  <div class="footer">Connected to Google Sheets live feed. Built as a single-file GitHub Pages dashboard.</div>
 </div>
 
 <script>
@@ -291,6 +369,17 @@ function setStatus(message) {
   if (el) el.textContent = message;
 }
 
+function setBadge(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function safeDate(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr + "T00:00:00");
+  return isNaN(d.getTime()) ? null : d;
+}
+
 function inferRecruitmentSignal(title, desc) {
   const t = ((title || "") + " " + (desc || "")).toLowerCase();
 
@@ -312,7 +401,10 @@ function inferRecruitmentSignal(title, desc) {
     /\bassessment day\b/,
     /\btype rated\b/,
     /\bnon[- ]?type rated\b/,
-    /\bcommand upgrade\b/
+    /\bcommand upgrade\b/,
+    /\bcommand fast track\b/,
+    /\bcrew recruitment\b/,
+    /\bpilot pathway\b/
   ];
 
   const strongNegative = [
@@ -325,7 +417,8 @@ function inferRecruitmentSignal(title, desc) {
     /\boperating crew\b/,
     /\bflight crew report\b/,
     /\bsecurity crew\b/,
-    /\bground crew incident\b/
+    /\bground crew incident\b/,
+    /\brecruitment freeze\b/
   ];
 
   if (strongNegative.some(function(rx){ return rx.test(t); })) return "NO";
@@ -351,7 +444,7 @@ function normalizeCompany(name, title, desc) {
   const combined = (s + " " + ((title || "") + " " + (desc || "")).toLowerCase()).trim();
 
   if (/wizz air uk|wizzair uk/.test(combined)) return "Wizz Air UK";
-  if (/\bwizz air\b|\bwizzair\b|\bwizz\b/.test(s)) return "Wizz Air";
+  if (/\bwizz air\b|\bwizzair\b|\bwizz\b/.test(combined)) return "Wizz Air";
   if (/ryanair|ryan air/.test(combined)) return "Ryanair";
   if (/easyjet|easy jet/.test(combined)) return "easyJet";
   if (/british airways|\bba\b/.test(combined)) return "British Airways";
@@ -359,6 +452,17 @@ function normalizeCompany(name, title, desc) {
   if (/tui/.test(combined)) return "TUI Airways";
   if (/loganair/.test(combined)) return "Loganair";
   return name || "Unknown";
+}
+
+function normalizeSignalSource(raw) {
+  const existing = raw.signal_source || raw["Signal Source"] || raw["signal source"] || raw["Recruitment Signal Source"] || raw["recruitment signal source"] || "";
+  if (existing) {
+    const val = existing.toLowerCase();
+    if (val.indexOf("manual") > -1) return "Manual";
+    if (val.indexOf("infer") > -1) return "Inferred";
+    return existing;
+  }
+  return "";
 }
 
 function normalizeRow(raw) {
@@ -373,16 +477,20 @@ function normalizeRow(raw) {
   let theme = raw.theme || raw.Theme || "";
   let subtheme = raw.subtheme || raw.Subtheme || "";
   let recruitment_signal = raw.recruitment_signal || raw["Recruitment Signal"] || raw["recruitment signal"] || "";
+  let signal_source = normalizeSignalSource(raw);
 
+  const hadManualSignal = !!recruitment_signal;
   if (!recruitment_signal) {
     recruitment_signal = inferRecruitmentSignal(title, description);
+    signal_source = "Inferred";
+  } else if (!signal_source) {
+    signal_source = "Manual";
   }
 
   if (!theme) {
     const inferred = inferTheme(title, description);
     theme = inferred[0];
     subtheme = inferred[1];
-    if (!recruitment_signal) recruitment_signal = inferred[2];
   }
 
   if (recruitment_signal === "YES" && (!theme || theme === "People / Recruitment")) {
@@ -392,7 +500,7 @@ function normalizeRow(raw) {
 
   return {
     title: title,
-    source: source,
+    source: source || "Unknown",
     published_at: published_at,
     url: url,
     description: description,
@@ -400,7 +508,8 @@ function normalizeRow(raw) {
     month: month,
     theme: theme || "Brand / Other",
     subtheme: subtheme || "Other",
-    recruitment_signal: recruitment_signal || "NO"
+    recruitment_signal: recruitment_signal || "NO",
+    signal_source: signal_source || (hadManualSignal ? "Manual" : "Inferred")
   };
 }
 
@@ -460,41 +569,60 @@ function populateFilters() {
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"]/g, function(m) {
+  return String(s || "").replace(/[&<>"]/g, function(m) {
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m];
   });
 }
 
-function getFilteredRows() {
+function withinWindow(r, windowValue) {
+  if (windowValue === "all") return true;
+  const d = safeDate(r.published_at);
+  if (!d) return false;
+  const now = new Date();
+  const diff = (now - d) / 86400000;
+  if (windowValue === "24h") return diff <= 1;
+  if (windowValue === "7d") return diff <= 7;
+  if (windowValue === "30d") return diff <= 30;
+  if (windowValue === "12m") return diff <= 366;
+  return true;
+}
+
+function getFilteredRows(includeSearch) {
   const company = document.getElementById("companyFilter").value;
   const theme = document.getElementById("themeFilter").value;
   const source = document.getElementById("sourceFilter").value;
   const recruit = document.getElementById("recruitFilter").value;
+  const signalSource = document.getElementById("signalSourceFilter").value;
   const windowValue = document.getElementById("timeWindow").value;
-  const q = (document.getElementById("searchBox") && document.getElementById("searchBox").value || "").trim().toLowerCase();
+  const q = ((document.getElementById("searchBox") && document.getElementById("searchBox").value) || "").trim().toLowerCase();
 
-  const now = new Date();
-
-  return allRows.filter(function(r) {
+  let rows = allRows.filter(function(r) {
     if (company !== "All Companies" && r.company !== company) return false;
     if (theme !== "All Themes" && r.theme !== theme) return false;
     if (source !== "All Sources" && r.source !== source) return false;
     if (recruit !== "All" && r.recruitment_signal !== recruit) return false;
-
-    if (windowValue !== "all" && r.published_at) {
-      const d = new Date(r.published_at + "T00:00:00");
-      const diff = (now - d) / 86400000;
-      if (windowValue === "24h" && diff > 1) return false;
-      if (windowValue === "7d" && diff > 7) return false;
-      if (windowValue === "30d" && diff > 30) return false;
-      if (windowValue === "12m" && diff > 366) return false;
-    }
-
-    if (q && ((r.title + " " + r.description).toLowerCase().indexOf(q) === -1)) return false;
+    if (signalSource !== "All" && r.signal_source !== signalSource) return false;
+    if (!withinWindow(r, windowValue)) return false;
+    if (includeSearch && q && ((r.title + " " + r.description).toLowerCase().indexOf(q) === -1)) return false;
     return true;
-  }).sort(function(a, b) {
+  });
+
+  const sortBy = (document.getElementById("sortBy") && document.getElementById("sortBy").value) || "date_desc";
+  rows = rows.sort(function(a, b) {
+    if (sortBy === "date_asc") return (a.published_at || "").localeCompare(b.published_at || "");
+    if (sortBy === "company_asc") return (a.company || "").localeCompare(b.company || "") || (b.published_at || "").localeCompare(a.published_at || "");
+    if (sortBy === "theme_asc") return (a.theme || "").localeCompare(b.theme || "") || (b.published_at || "").localeCompare(a.published_at || "");
     return (b.published_at || "").localeCompare(a.published_at || "");
   });
+  return rows;
+}
+
+function countBy(rows, fn) {
+  return rows.reduce(function(acc, r) {
+    const k = fn(r) || "Unknown";
+    acc[k] = (acc[k] || 0) + 1;
+    return acc;
+  }, {});
 }
 
 function summarize(rows) {
@@ -506,12 +634,25 @@ function summarize(rows) {
   return { articles: articles, sources: sources, topTheme: topTheme, themeCounts: themeCounts };
 }
 
-function countBy(rows, fn) {
-  return rows.reduce(function(acc, r) {
-    const k = fn(r) || "Unknown";
-    acc[k] = (acc[k] || 0) + 1;
-    return acc;
-  }, {});
+function formatPct(value) {
+  return (Math.round(value * 10) / 10).toFixed(1).replace(".0","") + "%";
+}
+
+function deltaLabel(current, previous, suffix) {
+  suffix = suffix || "";
+  const delta = (current || 0) - (previous || 0);
+  const sign = delta > 0 ? "+" : "";
+  return {
+    text: sign + delta + suffix + " vs previous 7d",
+    cls: delta > 0 ? "good" : delta < 0 ? "bad" : ""
+  };
+}
+
+function setDelta(id, obj) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = "delta" + (obj.cls ? " " + obj.cls : "");
+  el.textContent = obj.text;
 }
 
 function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, colorA, colorB) {
@@ -524,8 +665,8 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
     return;
   }
 
-  const width = 700, height = 280;
-  const margin = { top: 28, right: 20, bottom: 60, left: 40 };
+  const width = 760, height = 300;
+  const margin = { top: 28, right: 20, bottom: 64, left: 42 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
   const max = Math.max.apply(null, seriesA.concat(seriesB).concat([1]));
@@ -536,8 +677,8 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
     '<line x1="' + margin.left + '" y1="' + (height - margin.bottom) + '" x2="' + (width - margin.right) + '" y2="' + (height - margin.bottom) + '" stroke="#44518a"/>',
     '<rect x="' + margin.left + '" y="8" width="12" height="12" rx="3" fill="' + colorA + '"></rect>',
     '<text x="' + (margin.left + 18) + '" y="18" font-size="11" fill="#c7d2fe">' + legendA + '</text>',
-    '<rect x="' + (margin.left + 96) + '" y="8" width="12" height="12" rx="3" fill="' + colorB + '"></rect>',
-    '<text x="' + (margin.left + 114) + '" y="18" font-size="11" fill="#c7d2fe">' + legendB + '</text>'
+    '<rect x="' + (margin.left + 124) + '" y="8" width="12" height="12" rx="3" fill="' + colorB + '"></rect>',
+    '<text x="' + (margin.left + 142) + '" y="18" font-size="11" fill="#c7d2fe">' + legendB + '</text>'
   ];
 
   labels.forEach(function(label, i) {
@@ -553,8 +694,8 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
 
     parts.push('<rect x="' + xA + '" y="' + yA + '" width="' + barW + '" height="' + hA + '" rx="6" fill="' + colorA + '"></rect>');
     parts.push('<rect x="' + xB + '" y="' + yB + '" width="' + barW + '" height="' + hB + '" rx="6" fill="' + colorB + '"></rect>');
-    parts.push('<text x="' + (xA + barW / 2) + '" y="' + Math.max(yA - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + a + '</text>');
-    parts.push('<text x="' + (xB + barW / 2) + '" y="' + Math.max(yB - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + b + '</text>');
+    if (a > 0) parts.push('<text x="' + (xA + barW / 2) + '" y="' + Math.max(yA - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + a + '</text>');
+    if (b > 0) parts.push('<text x="' + (xB + barW / 2) + '" y="' + Math.max(yB - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + b + '</text>');
     parts.push('<text x="' + centerX + '" y="' + (height - margin.bottom + 16) + '" font-size="10" fill="#a7b0d6" text-anchor="middle">' + escapeHtml(label) + '</text>');
   });
 
@@ -575,9 +716,9 @@ function drawHorizontalBars(svgId, dataMap) {
     return;
   }
 
-  const colors = ["#7dd3fc", "#86efac", "#f9a8d4", "#fca5a5", "#c4b5fd", "#fde68a", "#93c5fd", "#fdba74"];
-  const width = 700, height = 280;
-  const margin = { top: 20, right: 20, bottom: 20, left: 180 };
+  const colors = ["#7dd3fc", "#86efac", "#f9a8d4", "#fde68a", "#c4b5fd", "#fdba74", "#93c5fd", "#fca5a5"];
+  const width = 760, height = 300;
+  const margin = { top: 20, right: 20, bottom: 20, left: 196 };
   const innerW = width - margin.left - margin.right;
   const max = Math.max.apply(null, entries.map(function(e) { return e[1]; }).concat([1]));
 
@@ -596,51 +737,16 @@ function drawHorizontalBars(svgId, dataMap) {
   svg.innerHTML = parts.join("");
 }
 
-function renderSources(rows) {
-  const table = document.getElementById("sourcesTable");
-  if (!table) return;
-  const entries = Object.entries(countBy(rows, function(r) { return r.source; }))
-    .sort(function(a, b) { return b[1] - a[1]; })
-    .slice(0, 10);
-  table.innerHTML = '<tr><th>Source</th><th>Articles</th></tr>' +
-    entries.map(function(item) {
-      return '<tr><td>' + escapeHtml(item[0]) + '</td><td>' + item[1] + '</td></tr>';
-    }).join("");
+function dateDaysAgo(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d.toISOString().slice(0, 10);
 }
 
-function renderLatest(rows) {
-  const wrap = document.getElementById("latestCards");
-  if (!wrap) return;
-  wrap.innerHTML = rows.slice(0, 5).map(function(r) {
-    const recruitTag = r.recruitment_signal === "YES" ? '<span class="tag">Recruitment</span>' : '';
-    return '<div class="card">' +
-      '<div class="meta">' + escapeHtml(r.company) + ' · ' + escapeHtml(r.source) + ' · ' + escapeHtml(r.published_at) + ' · ' + escapeHtml(r.theme) + recruitTag + '</div>' +
-      '<div class="article-title"><a href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.title) + '</a></div>' +
-      '<div class="small">' + escapeHtml(r.description || "") + '</div>' +
-      '</div>';
-  }).join("");
-}
-
-function renderArticles(rows) {
-  const table = document.getElementById("articlesTable");
-  if (!table) return;
-  table.innerHTML =
-    '<tr><th>Date</th><th>Company</th><th>Theme</th><th>Recruitment</th><th>Source</th><th>Title</th><th>URL</th></tr>' +
-    rows.map(function(r) {
-      return '<tr>' +
-        '<td>' + escapeHtml(r.published_at) + '</td>' +
-        '<td>' + escapeHtml(r.company) + '</td>' +
-        '<td>' + escapeHtml(r.theme) + '</td>' +
-        '<td>' + escapeHtml(r.recruitment_signal) + '</td>' +
-        '<td>' + escapeHtml(r.source) + '</td>' +
-        '<td>' + escapeHtml(r.title) + '</td>' +
-        '<td><a href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener noreferrer">Open</a></td>' +
-        '</tr>';
-    }).join("");
-}
-
-function formatPct(value) {
-  return (Math.round(value * 10) / 10).toFixed(1).replace('.0','') + '%';
+function rowsBetween(rows, startDate, endDate) {
+  return rows.filter(function(r) {
+    return r.published_at && r.published_at >= startDate && r.published_at <= endDate;
+  });
 }
 
 function lastNDates(n) {
@@ -654,62 +760,163 @@ function lastNDates(n) {
   return out;
 }
 
+function computeSpikeRows(rows) {
+  const byDay = countBy(rows.filter(function(r){ return r.published_at; }), function(r){ return r.published_at; });
+  const recruitByDay = countBy(rows.filter(function(r){ return r.published_at && r.recruitment_signal === "YES"; }), function(r){ return r.published_at; });
+  const entries = Object.entries(byDay).sort(function(a,b){ return a[0].localeCompare(b[0]); });
+  if (!entries.length) return [];
+
+  const totals = entries.map(function(e){ return e[1]; });
+  const avg = totals.reduce(function(a,b){ return a+b; }, 0) / totals.length;
+  return entries.map(function(e) {
+    const date = e[0];
+    const count = e[1];
+    const recruit = recruitByDay[date] || 0;
+    const dayRows = rows.filter(function(r){ return r.published_at === date; });
+    const topCompany = Object.entries(countBy(dayRows, function(r){ return r.company; })).sort(function(a,b){ return b[1] - a[1]; })[0];
+    const topTheme = Object.entries(countBy(dayRows, function(r){ return r.theme; })).sort(function(a,b){ return b[1] - a[1]; })[0];
+    return {
+      date: date,
+      count: count,
+      recruit: recruit,
+      isSpike: count >= Math.max(2, Math.ceil(avg * 1.5)),
+      topCompany: topCompany ? topCompany[0] : "–",
+      topTheme: topTheme ? topTheme[0] : "–"
+    };
+  }).filter(function(x){ return x.isSpike; }).sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,5);
+}
+
 function renderSpikes(rows) {
   const wrap = document.getElementById("spikeList");
   if (!wrap) return;
 
-  const byDay = countBy(rows.filter(function(r){ return r.published_at; }), function(r){ return r.published_at; });
-  const entries = Object.entries(byDay).sort(function(a,b){ return a[0].localeCompare(b[0]); });
-
-  if (!entries.length) {
-    wrap.innerHTML = '<div class="muted">No spike data yet.</div>';
-    return;
-  }
-
-  const counts = entries.map(function(e){ return e[1]; });
-  const avg = counts.reduce(function(a,b){ return a+b; }, 0) / counts.length;
-  const spikes = entries
-    .filter(function(e){ return e[1] >= Math.max(2, Math.ceil(avg * 1.5)); })
-    .sort(function(a,b){ return b[0].localeCompare(a[0]); })
-    .slice(0, 5);
-
+  const spikes = computeSpikeRows(rows);
   if (!spikes.length) {
     wrap.innerHTML = '<div class="muted">No unusual spike days detected from current data.</div>';
     return;
   }
 
   wrap.innerHTML = spikes.map(function(e){
-    const date = e[0];
-    const count = e[1];
-    const dayRows = rows.filter(function(r){ return r.published_at === date; });
-    const topCompany = Object.entries(countBy(dayRows, function(r){ return r.company; }))
-      .sort(function(a,b){ return b[1] - a[1]; })[0];
-    const topTheme = Object.entries(countBy(dayRows, function(r){ return r.theme; }))
-      .sort(function(a,b){ return b[1] - a[1]; })[0];
-
     return '<div class="spike-item">' +
-      '<div class="spike-title">' + escapeHtml(date) + ' · ' + count + ' articles</div>' +
-      '<div class="small">Top airline: ' + escapeHtml(topCompany ? topCompany[0] : '–') +
-      ' · Top theme: ' + escapeHtml(topTheme ? topTheme[0] : '–') + '</div>' +
+      '<div class="spike-title">' + escapeHtml(e.date) + ' · ' + e.count + ' articles</div>' +
+      '<div class="small">Recruitment: ' + e.recruit + ' · Top airline: ' + escapeHtml(e.topCompany) + '</div>' +
+      '<div class="small">Top theme: ' + escapeHtml(e.topTheme) + '</div>' +
       '</div>';
   }).join('');
 }
 
+function renderSources(rows) {
+  const table = document.getElementById("sourcesTable");
+  if (!table) return;
+  const entries = Object.entries(countBy(rows, function(r) { return r.source; }))
+    .sort(function(a, b) { return b[1] - a[1]; })
+    .slice(0, 10);
+  table.innerHTML = '<tr><th>Source</th><th class="right">Articles</th><th class="right">Recruitment</th></tr>' +
+    entries.map(function(item) {
+      const sourceRows = rows.filter(function(r){ return r.source === item[0]; });
+      const recruit = sourceRows.filter(function(r){ return r.recruitment_signal === "YES"; }).length;
+      return '<tr><td>' + escapeHtml(item[0]) + '</td><td class="right mono">' + item[1] + '</td><td class="right mono">' + recruit + '</td></tr>';
+    }).join("");
+}
+
+function renderLatest(rows) {
+  const wrap = document.getElementById("latestCards");
+  if (!wrap) return;
+  wrap.innerHTML = rows.slice(0, 6).map(function(r) {
+    const recruitTag = r.recruitment_signal === "YES" ? '<span class="tag good">Recruitment</span>' : '';
+    const signalTag = '<span class="tag warn">' + escapeHtml(r.signal_source) + '</span>';
+    return '<div class="card">' +
+      '<div class="meta">' + escapeHtml(r.company) + ' · ' + escapeHtml(r.source) + ' · ' + escapeHtml(r.published_at) + ' · ' + escapeHtml(r.theme) + recruitTag + signalTag + '</div>' +
+      '<div class="article-title"><a href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.title) + '</a></div>' +
+      '<div class="small">' + escapeHtml(r.description || "") + '</div>' +
+      '</div>';
+  }).join("");
+}
+
+function renderArticles(rows) {
+  const table = document.getElementById("articlesTable");
+  if (!table) return;
+  table.innerHTML =
+    '<tr><th>Date</th><th>Company</th><th>Theme</th><th>Recruitment</th><th>Signal source</th><th>Source</th><th>Title</th><th>URL</th></tr>' +
+    rows.map(function(r) {
+      return '<tr>' +
+        '<td class="mono">' + escapeHtml(r.published_at) + '</td>' +
+        '<td>' + escapeHtml(r.company) + '</td>' +
+        '<td>' + escapeHtml(r.theme) + '</td>' +
+        '<td>' + escapeHtml(r.recruitment_signal) + '</td>' +
+        '<td>' + escapeHtml(r.signal_source) + '</td>' +
+        '<td>' + escapeHtml(r.source) + '</td>' +
+        '<td>' + escapeHtml(r.title) + '</td>' +
+        '<td><a href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener noreferrer">Open</a></td>' +
+        '</tr>';
+    }).join("");
+}
+
+function buildLeaderboardRows(rows) {
+  const companyCounts = countBy(rows, function(r){ return r.company; });
+  const recruitCounts = countBy(rows.filter(function(r){ return r.recruitment_signal === "YES"; }), function(r){ return r.company; });
+  const total = rows.length || 1;
+  const wizzTotal = (companyCounts["Wizz Air UK"] || 0) + (companyCounts["Wizz Air"] || 0);
+  return Object.keys(companyCounts).map(function(company){
+    const totalCount = companyCounts[company] || 0;
+    const recruitCount = recruitCounts[company] || 0;
+    const share = (totalCount / total) * 100;
+    const gapVsWizz = company === "Wizz Air UK" || company === "Wizz Air" ? "" : ((wizzTotal - totalCount) >= 0 ? "+" : "") + (wizzTotal - totalCount);
+    return {
+      company: company,
+      total: totalCount,
+      recruit: recruitCount,
+      share: share,
+      recruitShare: totalCount ? (recruitCount / totalCount) * 100 : 0,
+      gapVsWizz: gapVsWizz
+    };
+  }).sort(function(a,b){ return b.total - a.total || b.recruit - a.recruit; });
+}
+
+function renderLeaderboard(rows) {
+  const table = document.getElementById("leaderboardTable");
+  if (!table) return;
+  const data = buildLeaderboardRows(rows);
+  if (!data.length) {
+    table.innerHTML = '<tr><td class="muted">No data for this filter.</td></tr>';
+    return;
+  }
+  table.innerHTML =
+    '<tr><th>Airline</th><th class="right">Articles</th><th class="right">Share</th><th class="right">Recruitment</th><th class="right">Recruit %</th><th class="right">Gap vs Wizz</th></tr>' +
+    data.map(function(r){
+      const gapCls = r.gapVsWizz === "" ? "" : (String(r.gapVsWizz).indexOf("-") === 0 ? 'bad' : 'good');
+      return '<tr>' +
+        '<td>' + escapeHtml(r.company) + '</td>' +
+        '<td class="right mono">' + r.total + '</td>' +
+        '<td class="right mono">' + formatPct(r.share) + '</td>' +
+        '<td class="right mono">' + r.recruit + '</td>' +
+        '<td class="right mono">' + formatPct(r.recruitShare) + '</td>' +
+        '<td class="right mono ' + gapCls + '">' + escapeHtml(r.gapVsWizz || "—") + '</td>' +
+      '</tr>';
+    }).join("");
+}
+
 function renderDashboard() {
-  const rows = getFilteredRows();
+  const rows = getFilteredRows(false);
+  const rowsForArticles = getFilteredRows(true);
   const s = summarize(rows);
 
-  const wizzUKCount = rows.filter(function(r) { return r.company === "Wizz Air UK"; }).length;
-  const wizzMainCount = rows.filter(function(r) { return r.company === "Wizz Air"; }).length;
-  const wizzCount = wizzUKCount + wizzMainCount;
-  const otherCount = rows.filter(function(r) { return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; }).length;
-  const recruitCount = rows.filter(function(r) { return r.recruitment_signal === "YES"; }).length;
+  const wizzUKRows = rows.filter(function(r) { return r.company === "Wizz Air UK"; });
+  const wizzMainRows = rows.filter(function(r) { return r.company === "Wizz Air"; });
+  const wizzRows = rows.filter(function(r) { return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
+  const otherRows = rows.filter(function(r) { return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; });
+  const recruitRows = rows.filter(function(r) { return r.recruitment_signal === "YES"; });
+  const wizzRecruitRows = recruitRows.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
+  const manualRows = rows.filter(function(r){ return r.signal_source === "Manual"; });
+  const inferredRows = rows.filter(function(r){ return r.signal_source === "Inferred"; });
 
-  const companyCounts = rows.reduce(function(acc, r) {
-    const k = r.company || "Unknown";
-    acc[k] = (acc[k] || 0) + 1;
-    return acc;
-  }, {});
+  const wizzUKCount = wizzUKRows.length;
+  const wizzMainCount = wizzMainRows.length;
+  const wizzCount = wizzRows.length;
+  const otherCount = otherRows.length;
+  const recruitCount = recruitRows.length;
+
+  const companyCounts = countBy(rows, function(r) { return r.company; });
   let topName = "–";
   let topVal = 0;
   Object.entries(companyCounts).forEach(function(entry) {
@@ -725,14 +932,42 @@ function renderDashboard() {
     .sort(function(a,b){ return b[1] - a[1]; });
   const topCompetitor = competitorCounts.length ? competitorCounts[0] : null;
   let gapLabel = "–";
+  let recruitGapLabel = "–";
   if (topCompetitor) {
     const gap = wizzCount - topCompetitor[1];
     gapLabel = (gap >= 0 ? "+" : "") + gap + " vs " + topCompetitor[0];
+    const topCompetitorRecruit = recruitRows.filter(function(r){ return r.company === topCompetitor[0]; }).length;
+    const recruitGap = wizzRecruitRows.length - topCompetitorRecruit;
+    recruitGapLabel = "Recruitment gap: " + (recruitGap >= 0 ? "+" : "") + recruitGap;
   }
 
   const wizzShare = s.articles ? (wizzCount / s.articles) * 100 : 0;
-  const compShare = s.articles ? (otherCount / s.articles) * 100 : 0;
   const recruitShare = s.articles ? (recruitCount / s.articles) * 100 : 0;
+  const wizzRecruitShare = recruitCount ? (wizzRecruitRows.length / recruitCount) * 100 : 0;
+
+  const endCurr = dateDaysAgo(0);
+  const startCurr = dateDaysAgo(6);
+  const endPrev = dateDaysAgo(7);
+  const startPrev = dateDaysAgo(13);
+
+  const current7 = rowsBetween(rows, startCurr, endCurr);
+  const previous7 = rowsBetween(rows, startPrev, endPrev);
+  const currentWizz7 = current7.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
+  const previousWizz7 = previous7.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
+  const currentWizzUK7 = current7.filter(function(r){ return r.company === "Wizz Air UK"; });
+  const previousWizzUK7 = previous7.filter(function(r){ return r.company === "Wizz Air UK"; });
+  const currentWizzMain7 = current7.filter(function(r){ return r.company === "Wizz Air"; });
+  const previousWizzMain7 = previous7.filter(function(r){ return r.company === "Wizz Air"; });
+  const currentOther7 = current7.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; });
+  const previousOther7 = previous7.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; });
+  const currentRecruit7 = current7.filter(function(r){ return r.recruitment_signal === "YES"; });
+  const previousRecruit7 = previous7.filter(function(r){ return r.recruitment_signal === "YES"; });
+  const currentShare7 = current7.length ? (currentWizz7.length / current7.length) * 100 : 0;
+  const previousShare7 = previous7.length ? (previousWizz7.length / previous7.length) * 100 : 0;
+  const currentRecruitShare7 = current7.length ? (currentRecruit7.length / current7.length) * 100 : 0;
+  const previousRecruitShare7 = previous7.length ? (previousRecruit7.length / previous7.length) * 100 : 0;
+  const currentWizzRecruitShare7 = currentRecruit7.length ? (currentRecruit7.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; }).length / currentRecruit7.length) * 100 : 0;
+  const previousWizzRecruitShare7 = previousRecruit7.length ? (previousRecruit7.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; }).length / previousRecruit7.length) * 100 : 0;
 
   document.getElementById("kpiArticles").textContent = s.articles;
   document.getElementById("kpiWizz").textContent = wizzCount;
@@ -740,21 +975,36 @@ function renderDashboard() {
   document.getElementById("kpiWizzMain").textContent = wizzMainCount;
   document.getElementById("kpiOther").textContent = otherCount;
   document.getElementById("kpiWizzShare").textContent = formatPct(wizzShare);
-  document.getElementById("kpiCompShare").textContent = formatPct(compShare);
-  document.getElementById("kpiTopAirline").textContent = topLabel;
-  document.getElementById("kpiGap").textContent = gapLabel;
   document.getElementById("kpiRecruitArticles").textContent = recruitCount;
   document.getElementById("kpiRecruitShare").textContent = formatPct(recruitShare);
-  document.getElementById("kpiTopTheme").textContent = s.topTheme;
+  document.getElementById("kpiWizzRecruitShare").textContent = formatPct(wizzRecruitShare);
+  document.getElementById("kpiTopAirline").textContent = topLabel;
+  document.getElementById("kpiGap").textContent = gapLabel;
+  document.getElementById("kpiGapRecruit").textContent = recruitGapLabel;
+  document.getElementById("kpiTopTheme").textContent = "Top theme: " + s.topTheme;
+  document.getElementById("kpiSignalMix").textContent = manualRows.length + " manual / " + inferredRows.length + " inferred";
+  document.getElementById("kpiTopAirlineMeta").textContent = topCompetitor ? ("Top competitor: " + topCompetitor[0] + " (" + topCompetitor[1] + ")") : "No competitor rows";
 
-  const wizzRows = rows.filter(function(r) { return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
-  const otherRows = rows.filter(function(r) { return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; });
+  setDelta("kpiArticlesDelta", deltaLabel(current7.length, previous7.length));
+  setDelta("kpiWizzDelta", deltaLabel(currentWizz7.length, previousWizz7.length));
+  setDelta("kpiWizzUKDelta", deltaLabel(currentWizzUK7.length, previousWizzUK7.length));
+  setDelta("kpiWizzMainDelta", deltaLabel(currentWizzMain7.length, previousWizzMain7.length));
+  setDelta("kpiOtherDelta", deltaLabel(currentOther7.length, previousOther7.length));
+  setDelta("kpiShareDelta", deltaLabel(currentShare7, previousShare7, " pts"));
+  setDelta("kpiRecruitDelta", deltaLabel(currentRecruit7.length, previousRecruit7.length));
+  setDelta("kpiRecruitShareDelta", deltaLabel(currentRecruitShare7, previousRecruitShare7, " pts"));
+  setDelta("kpiWizzRecruitDelta", deltaLabel(currentWizzRecruitShare7, previousWizzRecruitShare7, " pts"));
 
   const wizzMonthCounts = countBy(wizzRows, function(r) { return r.month; });
   const otherMonthCounts = countBy(otherRows, function(r) { return r.month; });
-  const allMonths = Array.from(new Set(Object.keys(wizzMonthCounts).concat(Object.keys(otherMonthCounts))))
-    .filter(Boolean)
-    .sort(function(a, b) { return a.localeCompare(b); });
+  const wizzRecruitMonthCounts = countBy(wizzRecruitRows, function(r) { return r.month; });
+  const otherRecruitMonthCounts = countBy(recruitRows.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; }), function(r){ return r.month; });
+  const allMonths = Array.from(new Set(
+    Object.keys(wizzMonthCounts)
+      .concat(Object.keys(otherMonthCounts))
+      .concat(Object.keys(wizzRecruitMonthCounts))
+      .concat(Object.keys(otherRecruitMonthCounts))
+  )).filter(Boolean).sort(function(a,b){ return a.localeCompare(b); });
 
   drawGroupedBarChart(
     "monthChart",
@@ -765,6 +1015,17 @@ function renderDashboard() {
     "Other airlines",
     "#7dd3fc",
     "#86efac"
+  );
+
+  drawGroupedBarChart(
+    "recruitMonthChart",
+    allMonths,
+    allMonths.map(function(m) { return wizzRecruitMonthCounts[m] || 0; }),
+    allMonths.map(function(m) { return otherRecruitMonthCounts[m] || 0; }),
+    "Wizz recruitment",
+    "Other recruitment",
+    "#fde68a",
+    "#f9a8d4"
   );
 
   const last7 = lastNDates(7);
@@ -783,9 +1044,10 @@ function renderDashboard() {
   );
 
   drawHorizontalBars("themeChart", s.themeCounts);
+  renderLeaderboard(rows);
   renderSources(rows);
-  renderLatest(rows);
-  renderArticles(rows);
+  renderLatest(rowsForArticles);
+  renderArticles(rowsForArticles);
   renderSpikes(rows);
 }
 
@@ -799,13 +1061,19 @@ async function loadData() {
     allRows = rows.map(function(r) { return normalizeRow(r); });
     populateFilters();
     renderDashboard();
+
+    const latestDate = allRows.map(function(r){ return r.published_at; }).filter(Boolean).sort().slice(-1)[0];
     setStatus("Data loaded: " + allRows.length + " rows");
+    setBadge("badgeRows", allRows.length + " rows");
+    setBadge("badgeUpdated", latestDate ? ("Latest article: " + latestDate) : "No article dates");
   } catch (err) {
     console.error(err);
     allRows = [];
     populateFilters();
     renderDashboard();
     setStatus("Failed to load data: " + err.message);
+    setBadge("badgeRows", "0 rows");
+    setBadge("badgeUpdated", "Load failed");
   }
 }
 
@@ -818,9 +1086,10 @@ document.querySelectorAll(".tab").forEach(function(tab) {
   });
 });
 
-["companyFilter", "themeFilter", "sourceFilter", "recruitFilter", "timeWindow", "searchBox"].forEach(function(id) {
+["companyFilter", "themeFilter", "sourceFilter", "recruitFilter", "signalSourceFilter", "timeWindow", "searchBox", "sortBy"].forEach(function(id) {
   const el = document.getElementById(id);
   if (el) el.addEventListener("input", renderDashboard);
+  if (el) el.addEventListener("change", renderDashboard);
 });
 
 populateFilters();
