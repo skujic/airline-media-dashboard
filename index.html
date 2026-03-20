@@ -99,9 +99,10 @@
 
   .kpis {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 12px;
     margin: 16px 0;
+    align-items: stretch;
   }
   .kpi {
     background: var(--panel);
@@ -110,8 +111,8 @@
     padding: 16px;
     min-height: 108px;
   }
-  .kpi .label { color: var(--muted); font-size: 12px; }
-  .kpi .value { font-size: 28px; font-weight: 800; margin-top: 6px; line-height: 1.15; }
+  .kpi .label { color: var(--muted); font-size: 12px; line-height: 1.3; min-height: 32px; }
+  .kpi .value { font-size: 28px; font-weight: 800; margin-top: 6px; line-height: 1.15; word-break: break-word; }
   .kpi .value.smallish { font-size: 18px; }
   .delta {
     margin-top: 8px;
@@ -563,9 +564,18 @@ function fillSelect(id, options, dedupe) {
 }
 
 function getThemeOptions() {
-  const themeOptions = uniqueSorted(allRows.map(function(r) { return r.theme; }));
-  if (themeOptions.indexOf("Recruitment") === -1) themeOptions.unshift("Recruitment");
-  return ["All Themes"].concat(themeOptions);
+  const themes = uniqueSorted(allRows.map(function(r) { return r.theme; }));
+  const hasRecruitment = allRows.some(function(r) { return r.recruitment_signal === "YES" || r.theme === "Recruitment"; });
+  if (hasRecruitment && themes.indexOf("Recruitment") === -1) themes.unshift("Recruitment");
+  return ["All Themes"].concat(themes);
+}
+
+function matchesThemeFilter(r, theme) {
+  if (theme === "All Themes") return true;
+  if (theme === "Recruitment") {
+    return r.theme === "Recruitment" || r.recruitment_signal === "YES";
+  }
+  return r.theme === theme;
 }
 
 function populateFilters() {
