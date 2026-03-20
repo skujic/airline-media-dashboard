@@ -837,6 +837,28 @@ function dateDaysAgo(days) {
   return d.toISOString().slice(0, 10);
 }
 
+function formatMonthLabel(monthKey) {
+  if (!monthKey) return "";
+  const d = new Date(monthKey + "-01T00:00:00");
+  if (isNaN(d.getTime())) return monthKey;
+  return d.toLocaleDateString("en-GB", { month: "short", year: "2-digit" });
+}
+
+function generateMonthRange(months) {
+  if (!months || !months.length) return [];
+  const sorted = months.filter(Boolean).slice().sort(function(a, b){ return a.localeCompare(b); });
+  const start = new Date(sorted[0] + "-01T00:00:00");
+  const end = new Date(sorted[sorted.length - 1] + "-01T00:00:00");
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return sorted;
+  const range = [];
+  const current = new Date(start);
+  while (current <= end) {
+    range.push(current.toISOString().slice(0, 7));
+    current.setMonth(current.getMonth() + 1);
+  }
+  return range;
+}
+
 function rowsBetween(rows, startDate, endDate) {
   return rows.filter(function(r) { return r.published_at && r.published_at >= startDate && r.published_at <= endDate; });
 }
@@ -924,17 +946,21 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
   const max = Math.max.apply(null, seriesA.concat(seriesB).concat([1]));
-  const groupW = innerW / labels.length;
-  const barW = Math.max(10, groupW * 0.28);
+  const minGroups = 4;
+  const groupCount = Math.max(labels.length, minGroups);
+  const groupW = innerW / groupCount;
+  const offset = (groupCount - labels.length) / 2;
+  const barW = Math.min(26, Math.max(10, groupW * 0.22));
+  const showEvery = labels.length > 8 ? 2 : 1;
   let parts = [
     '<line x1="' + margin.left + '" y1="' + (height - margin.bottom) + '" x2="' + (width - margin.right) + '" y2="' + (height - margin.bottom) + '" stroke="#44518a"/>',
     '<rect x="' + margin.left + '" y="8" width="12" height="12" rx="3" fill="' + colorA + '"></rect>',
     '<text x="' + (margin.left + 18) + '" y="18" font-size="11" fill="#c7d2fe">' + escapeHtml(legendA) + '</text>',
-    '<rect x="' + (margin.left + 146) + '" y="8" width="12" height="12" rx="3" fill="' + colorB + '"></rect>',
-    '<text x="' + (margin.left + 164) + '" y="18" font-size="11" fill="#c7d2fe">' + escapeHtml(legendB) + '</text>'
+    '<rect x="' + (margin.left + 178) + '" y="8" width="12" height="12" rx="3" fill="' + colorB + '"></rect>',
+    '<text x="' + (margin.left + 196) + '" y="18" font-size="11" fill="#c7d2fe">' + escapeHtml(legendB) + '</text>'
   ];
   labels.forEach(function(label, i) {
-    const centerX = margin.left + i * groupW + groupW / 2;
+    const centerX = margin.left + (i + offset) * groupW + groupW / 2;
     const a = seriesA[i] || 0;
     const b = seriesB[i] || 0;
     const hA = (a / max) * innerH;
@@ -947,7 +973,9 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
     parts.push('<rect x="' + xB + '" y="' + yB + '" width="' + barW + '" height="' + hB + '" rx="6" fill="' + colorB + '"></rect>');
     if (a > 0) parts.push('<text x="' + (xA + barW / 2) + '" y="' + Math.max(yA - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + a + '</text>');
     if (b > 0) parts.push('<text x="' + (xB + barW / 2) + '" y="' + Math.max(yB - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + b + '</text>');
-    parts.push('<text x="' + centerX + '" y="' + (height - margin.bottom + 16) + '" font-size="10" fill="#a7b0d6" text-anchor="middle">' + escapeHtml(label) + '</text>');
+    if (showEvery === 1 || i % showEvery === 0 || i === labels.length - 1) {
+      parts.push('<text x="' + centerX + '" y="' + (height - margin.bottom + 16) + '" font-size="11" fill="#c7d2fe" text-anchor="middle">' + escapeHtml(label) + '</text>');
+    }
   });
   svg.innerHTML = parts.join("");
 }
@@ -1338,10 +1366,12 @@ function renderDashboard() {
   const otherMonthCounts = countBy(otherRows, function(r) { return r.month; });
   const focusRecruitMonthCounts = countBy(focusRows.filter(function(r){ return r.recruitment_signal === "YES"; }), function(r) { return r.month; });
   const otherRecruitMonthCounts = countBy(otherRows.filter(function(r){ return r.recruitment_signal === "YES"; }), function(r){ return r.month; });
-  const allMonths = Array.from(new Set(Object.keys(focusMonthCounts).concat(Object.keys(otherMonthCounts)).concat(Object.keys(focusRecruitMonthCounts)).concat(Object.keys(otherRecruitMonthCounts)))).filter(Boolean).sort(function(a,b){ return a.localeCompare(b); });
+  const rawMonths = Array.from(new Set(Object.keys(focusMonthCounts).concat(Object.keys(otherMonthCounts)).concat(Object.keys(focusRecruitMonthCounts)).concat(Object.keys(otherRecruitMonthCounts)))).filter(Boolean).sort(function(a,b){ return a.localeCompare(b); });
+  const allMonths = generateMonthRange(rawMonths);
+  const monthLabels = allMonths.map(function(m) { return formatMonthLabel(m); });
 
-  drawGroupedBarChart("monthChart", allMonths, allMonths.map(function(m) { return focusMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherMonthCounts[m] || 0; }), focusLabel, "Competitors", "#7dd3fc", "#86efac");
-  drawGroupedBarChart("recruitMonthChart", allMonths, allMonths.map(function(m) { return focusRecruitMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherRecruitMonthCounts[m] || 0; }), focusLabel + " recruitment", "Competitor recruitment", "#fde68a", "#f9a8d4");
+  drawGroupedBarChart("monthChart", monthLabels, allMonths.map(function(m) { return focusMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherMonthCounts[m] || 0; }), focusLabel, "Competitors", "#7dd3fc", "#86efac");
+  drawGroupedBarChart("recruitMonthChart", monthLabels, allMonths.map(function(m) { return focusRecruitMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherRecruitMonthCounts[m] || 0; }), focusLabel + " aggregate recruitment", "Competitor recruitment", "#fde68a", "#f9a8d4");
 
   const last7 = lastNDates(7);
   const focusByDay = countBy(focusRows.filter(function(r){ return last7.indexOf(r.published_at) > -1; }), function(r){ return r.published_at; });
