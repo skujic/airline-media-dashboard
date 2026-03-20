@@ -562,9 +562,15 @@ function fillSelect(id, options, dedupe) {
   if (hasCurrent) select.value = current;
 }
 
+function getThemeOptions() {
+  const themeOptions = uniqueSorted(allRows.map(function(r) { return r.theme; }));
+  if (themeOptions.indexOf("Recruitment") === -1) themeOptions.unshift("Recruitment");
+  return ["All Themes"].concat(themeOptions);
+}
+
 function populateFilters() {
   fillSelect("companyFilter", companyPresets.concat(uniqueSorted(allRows.map(function(r) { return r.company; }))), true);
-  fillSelect("themeFilter", ["All Themes"].concat(uniqueSorted(allRows.map(function(r) { return r.theme; }))), false);
+  fillSelect("themeFilter", getThemeOptions(), false);
   fillSelect("sourceFilter", ["All Sources"].concat(uniqueSorted(allRows.map(function(r) { return r.source; }))), false);
 }
 
@@ -598,7 +604,7 @@ function getFilteredRows(includeSearch) {
 
   let rows = allRows.filter(function(r) {
     if (company !== "All Companies" && r.company !== company) return false;
-    if (theme !== "All Themes" && r.theme !== theme) return false;
+    if (!matchesThemeFilter(r, theme)) return false;
     if (source !== "All Sources" && r.source !== source) return false;
     if (recruit !== "All" && r.recruitment_signal !== recruit) return false;
     if (signalSource !== "All" && r.signal_source !== signalSource) return false;
