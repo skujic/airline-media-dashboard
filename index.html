@@ -252,7 +252,7 @@
     <div class="hero-top">
       <div>
         <h1 class="title">Airline Recruitment Intelligence</h1>
-        <p class="subtitle">Live dashboard for Wizz Air UK, Wizz Air, and competitor media coverage with recruitment-first analysis, momentum scoring, weighted signal quality, war-room comparison, and narrative gap tracking.</p>
+        <p class="subtitle">Live dashboard for Wizz Air UK, Wizz Air, and competitor media coverage with a lean recruitment-first view of Wizz aggregate versus competitors, momentum scoring, weighted pressure, and narrative gap tracking.</p>
       </div>
       <div class="hero-badges">
         <div class="hero-badge" id="badgeRows">0 rows</div>
@@ -289,14 +289,6 @@
       </select>
     </div>
     <div>
-      <label>Signal source</label>
-      <select id="signalSourceFilter">
-        <option value="All">All</option>
-        <option value="Manual">Manual</option>
-        <option value="Inferred">Inferred</option>
-      </select>
-    </div>
-    <div>
       <label>Time window</label>
       <select id="timeWindow">
         <option value="7d">Last 7 days</option>
@@ -306,10 +298,6 @@
         <option value="12m">Last 12 months</option>
         <option value="all">All loaded data</option>
       </select>
-    </div>
-    <div>
-      <label>Airline drill-down</label>
-      <select id="drilldownFilter"></select>
     </div>
   </div>
 
@@ -343,17 +331,7 @@
             <div class="value" id="warNarrative">—</div>
             <div class="small" id="warNarrativeMeta">—</div>
           </div>
-          <div class="war-metric">
-            <div class="label">Signal mix</div>
-            <div class="value" id="warSignalMix">—</div>
-            <div class="small" id="warSignalMeta">—</div>
-          </div>
         </div>
-      </div>
-      <div class="war-card">
-        <div class="war-title">Focus airline drill-down</div>
-        <div class="section-sub">Switch the drill-down filter to reframe this panel around one airline.</div>
-        <div id="drilldownPanel"></div>
       </div>
     </div>
 
@@ -361,27 +339,21 @@
       <div class="kpi"><div class="label">Articles</div><div class="value mono" id="kpiArticles">0</div><div class="delta" id="kpiArticlesDelta">–</div></div>
       <div class="kpi"><div class="label">Weighted Recruitment Pressure</div><div class="value mono" id="kpiWeightedPressure">0</div><div class="delta" id="kpiWeightedPressureDelta">–</div></div>
       <div class="kpi"><div class="label">Recruitment Momentum Score</div><div class="value mono" id="kpiMomentum">0</div><div class="delta" id="kpiMomentumDelta">–</div></div>
-      <div class="kpi"><div class="label">Wizz Total</div><div class="value mono" id="kpiWizz">0</div><div class="delta" id="kpiWizzDelta">–</div></div>
       <div class="kpi"><div class="label">Wizz Share %</div><div class="value mono" id="kpiWizzShare">0%</div><div class="delta" id="kpiShareDelta">–</div></div>
       <div class="kpi"><div class="label">Recruitment Articles</div><div class="value mono" id="kpiRecruitArticles">0</div><div class="delta" id="kpiRecruitDelta">–</div></div>
-      <div class="kpi"><div class="label">High-Intent Recruit %</div><div class="value mono" id="kpiHighIntent">0%</div><div class="delta" id="kpiHighIntentDelta">–</div></div>
-      <div class="kpi"><div class="label">Top Airline</div><div class="value smallish" id="kpiTopAirline">–</div><div class="delta" id="kpiTopAirlineMeta">–</div></div>
-      <div class="kpi"><div class="label">Gap vs Top Competitor</div><div class="value smallish" id="kpiGap">–</div><div class="delta" id="kpiGapRecruit">–</div></div>
-      <div class="kpi"><div class="label">Signal Coverage</div><div class="value smallish" id="kpiSignalMix">–</div><div class="delta" id="kpiTopTheme">–</div></div>
-      <div class="kpi"><div class="label">Priority Articles</div><div class="value smallish" id="kpiPriority">–</div><div class="delta" id="kpiPriorityDelta">–</div></div>
       <div class="kpi"><div class="label">Top Recruitment Event</div><div class="value smallish" id="kpiTopEvent">–</div><div class="delta" id="kpiTopEventDelta">–</div></div>
     </div>
 
     <div class="grid">
       <div class="panel chart">
-        <div class="section-title">Monthly volume: focus vs competitors</div>
+        <div class="section-title">Monthly volume: Wizz aggregate vs competitors</div>
         <svg id="monthChart" viewBox="0 0 760 300"></svg>
         <div class="small">Counts are based on loaded articles and current filters.</div>
       </div>
       <div class="panel chart">
-        <div class="section-title">Monthly recruitment signal: focus vs competitors</div>
+        <div class="section-title">Monthly recruitment signal: Wizz aggregate vs competitors</div>
         <svg id="recruitMonthChart" viewBox="0 0 760 300"></svg>
-        <div class="small">YES recruitment signals only, using manual + inferred logic.</div>
+        <div class="small">YES recruitment signals only.</div>
       </div>
     </div>
 
@@ -394,7 +366,7 @@
       <div class="panel chart">
         <div class="section-title">Daily trend: last 7 days</div>
         <svg id="dailyChart" viewBox="0 0 760 300"></svg>
-        <div class="small">Article counts by day for the focus airline versus all other airlines.</div>
+        <div class="small">Article counts by day for Wizz aggregate versus all other airlines.</div>
       </div>
     </div>
 
@@ -410,22 +382,10 @@
         <div class="gap-list" id="gapList"></div>
       </div>
     </div>
-
-    <div class="grid-3">
+    <div class="grid">
       <div class="panel">
         <div class="section-title">Competitor leaderboard</div>
         <div class="table-wrap"><table id="leaderboardTable"></table></div>
-      </div>
-      <div class="panel">
-        <div class="section-title">Spike detection</div>
-        <div class="spike-list" id="spikeList"></div>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="panel">
-        <div class="section-title">Top sources</div>
-        <table id="sourcesTable"></table>
       </div>
       <div class="panel">
         <div class="section-title">Latest priority articles</div>
@@ -462,10 +422,6 @@ const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQsYWbBos
 
 const companyPresets = [
   "All Companies", "Wizz Air UK", "Wizz Air", "Ryanair", "easyJet", "British Airways", "Jet2", "TUI Airways", "Loganair"
-];
-
-const drilldownPresets = [
-  "Wizz aggregate focus", "Wizz Air UK", "Wizz Air", "Ryanair", "easyJet", "British Airways", "Jet2", "TUI Airways", "Loganair"
 ];
 
 const EVENT_RULES = [
@@ -738,7 +694,6 @@ function populateFilters() {
   fillSelect("companyFilter", companyPresets.concat(uniqueSorted(allRows.map(function(r) { return r.company; }))), true);
   fillSelect("themeFilter", getThemeOptions(), false);
   fillSelect("sourceFilter", ["All Sources"].concat(uniqueSorted(allRows.map(function(r) { return r.source; }))), false);
-  fillSelect("drilldownFilter", ["Wizz aggregate focus"].concat(getAirlineList(allRows)), true);
 }
 
 function escapeHtml(s) {
@@ -766,7 +721,6 @@ function getFilteredRows(includeSearch) {
   const theme = document.getElementById("themeFilter").value;
   const source = document.getElementById("sourceFilter").value;
   const recruit = document.getElementById("recruitFilter").value;
-  const signalSource = document.getElementById("signalSourceFilter").value;
   const windowValue = document.getElementById("timeWindow").value;
   const q = ((document.getElementById("searchBox") && document.getElementById("searchBox").value) || "").trim().toLowerCase();
 
@@ -775,7 +729,6 @@ function getFilteredRows(includeSearch) {
     if (!matchesThemeFilter(r, theme)) return false;
     if (source !== "All Sources" && r.source !== source) return false;
     if (recruit !== "All" && r.recruitment_signal !== recruit) return false;
-    if (signalSource !== "All" && r.signal_source !== signalSource) return false;
     if (!withinWindow(r, windowValue)) return false;
     if (includeSearch && q && ((r.title + " " + r.description).toLowerCase().indexOf(q) === -1)) return false;
     return true;
@@ -875,30 +828,20 @@ function lastNDates(n) {
 }
 
 function getFocusRows(rows) {
-  const focus = document.getElementById("drilldownFilter").value || "Wizz aggregate focus";
-  if (focus === "Wizz aggregate focus") return rows.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
-  return rows.filter(function(r){ return r.company === focus; });
+  return rows.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
 }
 
 function getFocusLabel() {
-  const focus = document.getElementById("drilldownFilter").value || "Wizz aggregate focus";
-  return focus === "Wizz aggregate focus" ? "Wizz aggregate" : focus;
+  return "Wizz aggregate";
 }
 
 function getCompetitorRows(rows) {
-  const focus = document.getElementById("drilldownFilter").value || "Wizz aggregate focus";
-  if (focus === "Wizz aggregate focus") return rows.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; });
-  return rows.filter(function(r){ return r.company !== focus; });
+  return rows.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; });
 }
 
 function getTopCompetitorName(rows) {
-  const focus = document.getElementById("drilldownFilter").value || "Wizz aggregate focus";
   const counts = {};
-  if (focus === "Wizz aggregate focus") {
-    rows.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; }).forEach(function(r){ counts[r.company] = (counts[r.company] || 0) + 1; });
-  } else {
-    rows.filter(function(r){ return r.company !== focus; }).forEach(function(r){ counts[r.company] = (counts[r.company] || 0) + 1; });
-  }
+  rows.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; }).forEach(function(r){ counts[r.company] = (counts[r.company] || 0) + 1; });
   const top = Object.entries(counts).sort(function(a,b){ return b[1] - a[1]; })[0];
   return top ? top[0] : null;
 }
@@ -945,6 +888,11 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
   const margin = { top: 28, right: 20, bottom: 64, left: 42 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
+  const total = seriesA.concat(seriesB).reduce(function(acc, v){ return acc + (v || 0); }, 0);
+  if (total === 0) {
+    svg.innerHTML = '<text x="20" y="40" fill="#a7b0d6">No recruitment-signal data in the current filter.</text>';
+    return;
+  }
   const max = Math.max.apply(null, seriesA.concat(seriesB).concat([1]));
   const minGroups = 4;
   const groupCount = Math.max(labels.length, minGroups);
@@ -1040,36 +988,6 @@ function computeSpikeRows(rows) {
       topTheme: topTheme ? topTheme[0] : "–"
     };
   }).filter(function(x){ return x.isSpike; }).sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,5);
-}
-
-function renderSpikes(rows) {
-  const wrap = document.getElementById("spikeList");
-  if (!wrap) return;
-  const spikes = computeSpikeRows(rows);
-  if (!spikes.length) {
-    wrap.innerHTML = '<div class="muted">No unusual spike days detected from current data.</div>';
-    return;
-  }
-  wrap.innerHTML = spikes.map(function(e){
-    return '<div class="spike-item">' +
-      '<div class="spike-title">' + escapeHtml(e.date) + ' · ' + e.count + ' articles</div>' +
-      '<div class="small">Recruitment: ' + e.recruit + ' · Weighted pressure: ' + e.weighted + '</div>' +
-      '<div class="small">Top airline: ' + escapeHtml(e.topCompany) + ' · Top theme: ' + escapeHtml(e.topTheme) + '</div>' +
-    '</div>';
-  }).join('');
-}
-
-function renderSources(rows) {
-  const table = document.getElementById("sourcesTable");
-  if (!table) return;
-  const entries = Object.entries(countBy(rows, function(r) { return r.source; })).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
-  table.innerHTML = '<tr><th>Source</th><th class="right">Articles</th><th class="right">Recruitment</th><th class="right">Weighted</th></tr>' +
-    entries.map(function(item) {
-      const sourceRows = rows.filter(function(r){ return r.source === item[0]; });
-      const recruit = sourceRows.filter(function(r){ return r.recruitment_signal === "YES"; }).length;
-      const weight = weightedPressure(sourceRows);
-      return '<tr><td>' + escapeHtml(item[0]) + '</td><td class="right mono">' + item[1] + '</td><td class="right mono">' + recruit + '</td><td class="right mono">' + weight + '</td></tr>';
-    }).join("");
 }
 
 function priorityTag(flag) {
@@ -1228,25 +1146,6 @@ function renderNarrativeGaps(rows) {
   }).join('');
 }
 
-function renderDrilldown(rows) {
-  const panel = document.getElementById("drilldownPanel");
-  if (!panel) return;
-  const focusRows = getFocusRows(rows);
-  const topCompRows = getTopCompetitorRows(rows);
-  const focusLabel = getFocusLabel();
-  const focusRecruit = focusRows.filter(function(r){ return r.recruitment_signal === "YES"; });
-  const topCompName = getTopCompetitorName(rows) || "No competitor";
-  const focusMomentum = momentumScoreForRows(focusRows, rows);
-  const topCompMomentum = momentumScoreForRows(topCompRows, rows);
-  const eventCounts = Object.entries(countBy(focusRecruit, function(r){ return r.recruitment_event; })).sort(function(a,b){ return b[1] - a[1]; }).slice(0, 3);
-  panel.innerHTML =
-    '<div class="small"><strong>' + escapeHtml(focusLabel) + '</strong> has ' + focusRows.length + ' filtered articles, ' + focusRecruit.length + ' recruitment-tagged articles, and ' + weightedPressure(focusRows) + ' weighted pressure.</div>' +
-    '<div class="small" style="margin-top:8px;">Momentum: ' + focusMomentum + ' vs ' + escapeHtml(topCompName) + ' at ' + topCompMomentum + '.</div>' +
-    '<div class="chip-row" style="margin-top:10px;">' +
-      (eventCounts.length ? eventCounts.map(function(e){ return '<span class="chip">' + escapeHtml(e[0]) + ' · ' + e[1] + '</span>'; }).join("") : '<span class="chip">No recruitment events in current view</span>') +
-    '</div>';
-}
-
 function renderWarPanel(rows) {
   const focusRows = getFocusRows(rows);
   const focusLabel = getFocusLabel();
@@ -1258,8 +1157,6 @@ function renderWarPanel(rows) {
   const compWeighted = weightedPressure(topCompRows);
   const gaps = narrativeGaps(rows);
   const mainGap = gaps[0];
-  const focusManual = focusRows.filter(function(r){ return r.signal_source === "Manual"; }).length;
-  const focusInferred = focusRows.filter(function(r){ return r.signal_source === "Inferred"; }).length;
   document.getElementById("warFocusName").textContent = focusLabel;
   document.getElementById("warFocusMeta").textContent = focusRows.length + " articles · " + focusWeighted + " weighted";
   document.getElementById("warCompName").textContent = topCompName || "—";
@@ -1270,8 +1167,6 @@ function renderWarPanel(rows) {
   document.getElementById("warPressureMeta").textContent = "Focus " + focusWeighted + " vs competitor " + compWeighted;
   document.getElementById("warNarrative").textContent = mainGap ? (mainGap.gap >= 0 ? "Lead" : "Gap") : "—";
   document.getElementById("warNarrativeMeta").textContent = mainGap ? (mainGap.tag + " · " + (mainGap.gap > 0 ? "+" : "") + formatPct(mainGap.gap * 100).replace('%',' pts')) : "No clear theme gap";
-  document.getElementById("warSignalMix").textContent = focusManual + " / " + focusInferred;
-  document.getElementById("warSignalMeta").textContent = "Manual / inferred";
 }
 
 function buildExecutiveSummary(rows) {
@@ -1296,25 +1191,13 @@ function renderDashboard() {
 
   const focusRows = getFocusRows(rows);
   const otherRows = getCompetitorRows(rows);
-  const wizzRows = rows.filter(function(r) { return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
   const recruitRows = rows.filter(function(r) { return r.recruitment_signal === "YES"; });
-  const highIntentRecruitRows = recruitRows.filter(function(r){ return r.event_quality === "High-intent"; });
-  const manualRows = rows.filter(function(r){ return r.signal_source === "Manual"; });
-  const inferredRows = rows.filter(function(r){ return r.signal_source === "Inferred"; });
-
-  const companyCounts = countBy(rows, function(r) { return r.company; });
-  let topName = "–", topVal = 0;
-  Object.entries(companyCounts).forEach(function(entry) {
-    if (entry[1] > topVal) { topVal = entry[1]; topName = entry[0]; }
-  });
-
   const topCompetitor = getTopCompetitorName(rows);
   const topCompetitorRows = getTopCompetitorRows(rows);
   const focusLabel = getFocusLabel();
   const focusCount = focusRows.length;
   const compCount = topCompetitorRows.length;
   const focusRecruit = focusRows.filter(function(r){ return r.recruitment_signal === "YES"; });
-  const compRecruit = topCompetitorRows.filter(function(r){ return r.recruitment_signal === "YES"; });
 
   const weighted = weightedPressure(rows);
   const focusMomentum = momentumScoreForRows(focusRows, rows);
@@ -1329,9 +1212,6 @@ function renderDashboard() {
   const previousMomentum7 = momentumScoreForRows(previousFocus7, previous7.length ? previous7 : rows);
 
   const focusShare = rows.length ? (focusCount / rows.length) * 100 : 0;
-  const highIntentShare = recruitRows.length ? (highIntentRecruitRows.length / recruitRows.length) * 100 : 0;
-  const priorityHigh = rows.filter(function(r){ return r.priority_flag === "Critical" || r.priority_flag === "High"; }).length;
-  const topTheme = s.topTheme;
   const eventCounts = Object.entries(countBy(recruitRows, function(r){ return r.recruitment_event; })).sort(function(a,b){ return b[1] - a[1]; });
   const topEvent = eventCounts[0];
 
@@ -1339,28 +1219,16 @@ function renderDashboard() {
   document.getElementById("kpiArticles").textContent = s.articles;
   document.getElementById("kpiWeightedPressure").textContent = weighted;
   document.getElementById("kpiMomentum").textContent = focusMomentum;
-  document.getElementById("kpiWizz").textContent = wizzRows.length;
-  document.getElementById("kpiWizzShare").textContent = formatPct((wizzRows.length / (rows.length || 1)) * 100);
+  document.getElementById("kpiWizzShare").textContent = formatPct(focusShare);
   document.getElementById("kpiRecruitArticles").textContent = recruitRows.length;
-  document.getElementById("kpiHighIntent").textContent = formatPct(highIntentShare);
-  document.getElementById("kpiTopAirline").textContent = topName === "–" ? "–" : (topName + " (" + topVal + ")");
-  document.getElementById("kpiGap").textContent = topCompetitor ? ((focusCount - compCount > 0 ? "+" : "") + (focusCount - compCount) + " vs " + topCompetitor) : "–";
-  document.getElementById("kpiGapRecruit").textContent = topCompetitor ? ("Recruitment gap: " + (focusRecruit.length - compRecruit.length > 0 ? "+" : "") + (focusRecruit.length - compRecruit.length)) : "–";
-  document.getElementById("kpiTopTheme").textContent = "Top theme: " + topTheme;
-  document.getElementById("kpiSignalMix").textContent = manualRows.length + " manual / " + inferredRows.length + " inferred";
-  document.getElementById("kpiTopAirlineMeta").textContent = topCompetitor ? ("Top competitor: " + topCompetitor + " (" + compCount + ")") : "No competitor rows";
-  document.getElementById("kpiPriority").textContent = priorityHigh + " high+";
-  document.getElementById("kpiPriorityDelta").textContent = rows.length ? formatPct((priorityHigh / rows.length) * 100) + " of current view" : "–";
   document.getElementById("kpiTopEvent").textContent = topEvent ? topEvent[0] : "–";
   document.getElementById("kpiTopEventDelta").textContent = topEvent ? (topEvent[1] + " articles") : "–";
 
   setDelta("kpiArticlesDelta", deltaLabel(current7.length, previous7.length));
   setDelta("kpiWeightedPressureDelta", deltaLabel(currentWeighted7, previousWeighted7));
   setDelta("kpiMomentumDelta", deltaLabel(currentMomentum7, previousMomentum7));
-  setDelta("kpiWizzDelta", deltaLabel(rowsBetween(wizzRows, startCurr, endCurr).length, rowsBetween(wizzRows, startPrev, endPrev).length));
   setDelta("kpiShareDelta", deltaLabel((currentFocus7.length / Math.max(1, current7.length)) * 100, (previousFocus7.length / Math.max(1, previous7.length)) * 100, " pts"));
   setDelta("kpiRecruitDelta", deltaLabel(current7.filter(function(r){ return r.recruitment_signal === "YES"; }).length, previous7.filter(function(r){ return r.recruitment_signal === "YES"; }).length));
-  setDelta("kpiHighIntentDelta", deltaLabel((current7.filter(function(r){ return r.recruitment_signal === "YES" && r.event_quality === "High-intent"; }).length / Math.max(1, current7.filter(function(r){ return r.recruitment_signal === "YES"; }).length)) * 100, (previous7.filter(function(r){ return r.recruitment_signal === "YES" && r.event_quality === "High-intent"; }).length / Math.max(1, previous7.filter(function(r){ return r.recruitment_signal === "YES"; }).length)) * 100, " pts"));
 
   const focusMonthCounts = countBy(focusRows, function(r) { return r.month; });
   const otherMonthCounts = countBy(otherRows, function(r) { return r.month; });
@@ -1380,13 +1248,10 @@ function renderDashboard() {
 
   drawHorizontalBars("themeChart", s.themeCounts);
   renderLeaderboard(rows);
-  renderSources(rows);
   renderLatest(rowsForArticles);
   renderArticles(rowsForArticles);
-  renderSpikes(rows);
   renderHeatmap(rows);
   renderNarrativeGaps(rows);
-  renderDrilldown(rows);
   renderWarPanel(rows);
 }
 
@@ -1424,7 +1289,7 @@ document.querySelectorAll(".tab").forEach(function(tab) {
   });
 });
 
-["companyFilter", "themeFilter", "sourceFilter", "recruitFilter", "signalSourceFilter", "timeWindow", "drilldownFilter", "searchBox", "sortBy"].forEach(function(id) {
+["companyFilter", "themeFilter", "sourceFilter", "recruitFilter", "timeWindow", "searchBox", "sortBy"].forEach(function(id) {
   const el = document.getElementById(id);
   if (el) el.addEventListener("input", renderDashboard);
   if (el) el.addEventListener("change", renderDashboard);
