@@ -428,12 +428,12 @@
     </div>
 
     <div class="kpis">
-      <div class="kpi"><div class="label">Articles in scope</div><div class="value mono" id="kpiArticles">0</div><div class="delta" id="kpiArticlesDelta">–</div></div>
-      <div class="kpi"><div class="label">Market weighted pressure</div><div class="value mono" id="kpiWeightedPressure">0</div><div class="delta" id="kpiWeightedPressureDelta">–</div></div>
-      <div class="kpi"><div class="label">Wizz momentum score</div><div class="value mono" id="kpiMomentum">0</div><div class="delta" id="kpiMomentumDelta">–</div></div>
-      <div class="kpi"><div class="label">Wizz share of volume</div><div class="value mono" id="kpiWizzShare">0%</div><div class="delta" id="kpiShareDelta">–</div></div>
-      <div class="kpi"><div class="label">Wizz recruitment articles</div><div class="value mono" id="kpiRecruitArticles">0</div><div class="delta" id="kpiRecruitDelta">–</div></div>
-      <div class="kpi"><div class="label">Top Wizz recruitment event</div><div class="value smallish" id="kpiTopEvent">–</div><div class="delta" id="kpiTopEventDelta">–</div></div>
+      <div class="kpi"><div class="label" id="kpiArticlesLabel">Articles in scope</div><div class="value mono" id="kpiArticles">0</div><div class="delta" id="kpiArticlesDelta">–</div></div>
+      <div class="kpi"><div class="label" id="kpiWeightedPressureLabel">Market weighted pressure</div><div class="value mono" id="kpiWeightedPressure">0</div><div class="delta" id="kpiWeightedPressureDelta">–</div></div>
+      <div class="kpi"><div class="label" id="kpiMomentumLabel">Wizz momentum score</div><div class="value mono" id="kpiMomentum">0</div><div class="delta" id="kpiMomentumDelta">–</div></div>
+      <div class="kpi"><div class="label" id="kpiShareLabel">Wizz share of volume</div><div class="value mono" id="kpiWizzShare">0%</div><div class="delta" id="kpiShareDelta">–</div></div>
+      <div class="kpi"><div class="label" id="kpiRecruitLabel">Wizz recruitment articles</div><div class="value mono" id="kpiRecruitArticles">0</div><div class="delta" id="kpiRecruitDelta">–</div></div>
+      <div class="kpi"><div class="label" id="kpiTopEventLabel">Top Wizz recruitment event</div><div class="value smallish" id="kpiTopEvent">–</div><div class="delta" id="kpiTopEventDelta">–</div></div>
     </div>
 
     <div class="grid">
@@ -1290,9 +1290,16 @@ function buildExecutiveSummary(rows) {
 }
 
 function renderDashboard() {
+  const companyValue = (document.getElementById("companyFilter") || {}).value || "All Companies";
   const comparisonRows = getFilteredRows(false, { ignoreCompany: true });
+  const detailRows = getFilteredRows(false, { ignoreCompany: false });
   const rowsForArticles = getFilteredRows(true, { ignoreCompany: false });
-  const s = summarize(comparisonRows);
+  const comparisonSummary = summarize(comparisonRows);
+  const detailSummary = summarize(detailRows);
+  const isCompanyScoped = companyValue && companyValue !== "All Companies";
+  const metricRows = isCompanyScoped ? detailRows : comparisonRows;
+  const metricSummary = isCompanyScoped ? detailSummary : comparisonSummary;
+  const metricLabel = isCompanyScoped ? companyValue : "Wizz aggregate";
 
   const focusRows = getFocusRows(comparisonRows);
   const otherRows = getCompetitorRows(comparisonRows);
@@ -1301,33 +1308,50 @@ function renderDashboard() {
   const weighted = weightedPressure(comparisonRows);
   const focusWeighted = weightedPressure(focusRows);
   const focusMomentum = momentumScoreForRows(focusRows, comparisonRows);
+
+  const metricRecruit = metricRows.filter(function(r) { return r.recruitment_signal === "YES"; });
+  const metricWeighted = weightedPressure(metricRows);
+  const metricShare = comparisonRows.length && isCompanyScoped ? (detailRows.length / comparisonRows.length) * 100 : (comparisonRows.length ? (focusRows.length / comparisonRows.length) * 100 : 0);
+  const metricTopEvent = Object.entries(countBy(metricRecruit, function(r){ return r.recruitment_event; })).sort(function(a,b){ return b[1] - a[1]; })[0];
+  const metricMomentum = isCompanyScoped ? momentumScoreForRows(detailRows, comparisonRows) : focusMomentum;
+
   const endCurr = dateDaysAgo(0), startCurr = dateDaysAgo(6), endPrev = dateDaysAgo(7), startPrev = dateDaysAgo(13);
   const current7 = rowsBetween(comparisonRows, startCurr, endCurr);
   const previous7 = rowsBetween(comparisonRows, startPrev, endPrev);
+  const currentDetail7 = rowsBetween(detailRows, startCurr, endCurr);
+  const previousDetail7 = rowsBetween(detailRows, startPrev, endPrev);
   const currentFocus7 = getFocusRows(current7);
   const previousFocus7 = getFocusRows(previous7);
-  const currentWeighted7 = weightedPressure(current7);
-  const previousWeighted7 = weightedPressure(previous7);
-  const currentMomentum7 = momentumScoreForRows(currentFocus7, current7.length ? current7 : comparisonRows);
-  const previousMomentum7 = momentumScoreForRows(previousFocus7, previous7.length ? previous7 : comparisonRows);
-
-  const focusShare = comparisonRows.length ? (focusRows.length / comparisonRows.length) * 100 : 0;
-  const topEvent = Object.entries(countBy(focusRecruit, function(r){ return r.recruitment_event; })).sort(function(a,b){ return b[1] - a[1]; })[0];
+  const currentWeighted7 = isCompanyScoped ? weightedPressure(currentDetail7) : weightedPressure(current7);
+  const previousWeighted7 = isCompanyScoped ? weightedPressure(previousDetail7) : weightedPressure(previous7);
+  const currentMomentum7 = isCompanyScoped ? momentumScoreForRows(currentDetail7, current7.length ? current7 : comparisonRows) : momentumScoreForRows(currentFocus7, current7.length ? current7 : comparisonRows);
+  const previousMomentum7 = isCompanyScoped ? momentumScoreForRows(previousDetail7, previous7.length ? previous7 : comparisonRows) : momentumScoreForRows(previousFocus7, previous7.length ? previous7 : comparisonRows);
+  const currentShare7 = comparisonRows.length && isCompanyScoped ? (currentDetail7.length / Math.max(1, current7.length)) * 100 : (currentFocus7.length / Math.max(1, current7.length)) * 100;
+  const previousShare7 = comparisonRows.length && isCompanyScoped ? (previousDetail7.length / Math.max(1, previous7.length)) * 100 : (previousFocus7.length / Math.max(1, previous7.length)) * 100;
+  const currentRecruit7 = (isCompanyScoped ? currentDetail7 : currentFocus7).filter(function(r){ return r.recruitment_signal === "YES"; }).length;
+  const previousRecruit7 = (isCompanyScoped ? previousDetail7 : previousFocus7).filter(function(r){ return r.recruitment_signal === "YES"; }).length;
 
   document.getElementById("execSummary").innerHTML = buildExecutiveSummary(comparisonRows);
-  document.getElementById("kpiArticles").textContent = s.articles;
-  document.getElementById("kpiWeightedPressure").textContent = weighted;
-  document.getElementById("kpiMomentum").textContent = focusMomentum;
-  document.getElementById("kpiWizzShare").textContent = formatPct(focusShare);
-  document.getElementById("kpiRecruitArticles").textContent = focusRecruit.length;
-  document.getElementById("kpiTopEvent").textContent = topEvent ? topEvent[0] : "–";
-  document.getElementById("kpiTopEventDelta").textContent = topEvent ? (topEvent[1] + " Wizz articles") : "–";
+  document.getElementById("kpiArticlesLabel").textContent = isCompanyScoped ? (metricLabel + " articles") : "Articles in scope";
+  document.getElementById("kpiWeightedPressureLabel").textContent = isCompanyScoped ? (metricLabel + " weighted pressure") : "Market weighted pressure";
+  document.getElementById("kpiMomentumLabel").textContent = isCompanyScoped ? (metricLabel + " momentum score") : "Wizz momentum score";
+  document.getElementById("kpiShareLabel").textContent = isCompanyScoped ? (metricLabel + " share of volume") : "Wizz share of volume";
+  document.getElementById("kpiRecruitLabel").textContent = isCompanyScoped ? (metricLabel + " recruitment articles") : "Wizz recruitment articles";
+  document.getElementById("kpiTopEventLabel").textContent = isCompanyScoped ? ("Top " + metricLabel + " recruitment event") : "Top Wizz recruitment event";
 
-  setDelta("kpiArticlesDelta", deltaLabel(current7.length, previous7.length));
+  document.getElementById("kpiArticles").textContent = metricSummary.articles;
+  document.getElementById("kpiWeightedPressure").textContent = metricWeighted;
+  document.getElementById("kpiMomentum").textContent = metricMomentum;
+  document.getElementById("kpiWizzShare").textContent = formatPct(metricShare);
+  document.getElementById("kpiRecruitArticles").textContent = metricRecruit.length;
+  document.getElementById("kpiTopEvent").textContent = metricTopEvent ? metricTopEvent[0] : "–";
+  document.getElementById("kpiTopEventDelta").textContent = metricTopEvent ? (metricTopEvent[1] + " articles") : "–";
+
+  setDelta("kpiArticlesDelta", deltaLabel(isCompanyScoped ? currentDetail7.length : current7.length, isCompanyScoped ? previousDetail7.length : previous7.length));
   setDelta("kpiWeightedPressureDelta", deltaLabel(currentWeighted7, previousWeighted7));
   setDelta("kpiMomentumDelta", deltaLabel(currentMomentum7, previousMomentum7));
-  setDelta("kpiShareDelta", deltaLabel((currentFocus7.length / Math.max(1, current7.length)) * 100, (previousFocus7.length / Math.max(1, previous7.length)) * 100, " pts"));
-  setDelta("kpiRecruitDelta", deltaLabel(currentFocus7.filter(function(r){ return r.recruitment_signal === "YES"; }).length, previousFocus7.filter(function(r){ return r.recruitment_signal === "YES"; }).length));
+  setDelta("kpiShareDelta", deltaLabel(currentShare7, previousShare7, " pts"));
+  setDelta("kpiRecruitDelta", deltaLabel(currentRecruit7, previousRecruit7));
 
   const focusMonthCounts = countBy(focusRows, function(r) { return r.month; });
   const otherMonthCounts = countBy(otherRows, function(r) { return r.month; });
@@ -1345,7 +1369,7 @@ function renderDashboard() {
   const otherByDay = countBy(otherRows.filter(function(r){ return last7.indexOf(r.published_at) > -1; }), function(r){ return r.published_at; });
   drawGroupedBarChart("dailyChart", last7.map(function(d){ return d.slice(5); }), last7.map(function(d){ return focusByDay[d] || 0; }), last7.map(function(d){ return otherByDay[d] || 0; }), "Wizz aggregate", "Competitors", "#7dd3fc", "#f9a8d4");
 
-  drawHorizontalBars("themeChart", s.themeCounts);
+  drawHorizontalBars("themeChart", comparisonSummary.themeCounts);
   renderLeaderboard(comparisonRows);
   renderLatest(rowsForArticles);
   renderArticles(rowsForArticles);
