@@ -6,347 +6,334 @@
 <title>Airline Recruitment Intelligence</title>
 <style>
   :root {
+    --bg: #f8f9fa;
     --surface: #f8f9fa;
-    --surface-container: #eaeff1;
-    --surface-container-low: #f1f4f6;
-    --surface-card: #ffffff;
-    --surface-tint: rgba(255,255,255,0.72);
+    --section: #eaeff1;
+    --section-2: #f1f4f6;
+    --panel: #ffffff;
+    --panel-soft: #f7f9fb;
     --text: #2b3437;
     --muted: #586064;
-    --muted-soft: #7b868a;
+    --muted-2: #7b8489;
     --primary: #005bc1;
     --primary-dim: #004faa;
-    --secondary: #cfe6f2;
-    --secondary-text: #40555f;
-    --outline: rgba(171,179,183,0.22);
-    --outline-soft: rgba(171,179,183,0.12);
-    --good: #1f7a4d;
-    --danger: #b2474f;
-    --warm: #b67b0f;
-    --chip: #eef3f6;
-    --chip-strong: #e3ebf1;
-    --shadow: 0 16px 32px rgba(43,52,55,0.04);
-    --radius-lg: 14px;
-    --radius-md: 10px;
-    --radius-sm: 6px;
+    --primary-soft: #dce9f8;
+    --accent: #1c63c7;
+    --accent-2: #327a56;
+    --accent-3: #b45d67;
+    --accent-4: #8a6b1f;
+    --danger: #b64e56;
+    --outline: rgba(171, 179, 183, 0.18);
+    --ghost: rgba(171, 179, 183, 0.12);
+    --chip: #edf3f8;
+    --good-bg: rgba(71, 125, 88, 0.10);
+    --bad-bg: rgba(182, 78, 86, 0.10);
+    --warn-bg: rgba(163, 123, 34, 0.10);
+    --shadow: 0 14px 30px rgba(43, 52, 55, 0.04);
   }
   * { box-sizing: border-box; }
-  html { background: var(--surface); }
+  html { background: var(--bg); }
   body {
     margin: 0;
     font-family: Inter, system-ui, Arial, sans-serif;
     background:
-      radial-gradient(circle at top right, rgba(0,91,193,0.06), transparent 26%),
-      linear-gradient(180deg, #fbfcfc 0%, var(--surface) 100%);
+      radial-gradient(circle at top left, rgba(0,91,193,0.05), transparent 28%),
+      linear-gradient(180deg, #fbfcfd 0%, #f6f8f9 100%);
     color: var(--text);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
   }
   a { color: var(--primary); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .wrap { max-width: 1560px; margin: 0 auto; padding: 28px; }
-  .panel, .card, .kpi {
-    background: var(--surface-card);
-    border: 0;
-    border-radius: var(--radius-lg);
+  a:hover { color: var(--primary-dim); }
+  .wrap { max-width: 1600px; margin: 0 auto; padding: 28px; }
+  .panel {
+    background: var(--panel);
+    border: none;
+    border-radius: 16px;
     padding: 22px;
-    box-shadow: none;
+    box-shadow: var(--shadow);
   }
   .hero {
-    margin-bottom: 18px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    color: #f7f9ff;
+    box-shadow: 0 18px 36px rgba(0, 80, 170, 0.16);
+  }
+  .title {
+    font-size: clamp(2rem, 3vw, 2.7rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    margin: 0 0 10px;
+    color: #f7f9ff;
+  }
+  .subtitle {
+    color: rgba(247,249,255,0.84);
+    line-height: 1.65;
+    margin: 0;
+    max-width: 980px;
+    font-size: 0.95rem;
+  }
+  .statusbar, .summary-strip {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: rgba(247,249,255,0.88);
+    font-size: 0.83rem;
+    line-height: 1.6;
     backdrop-filter: blur(12px);
   }
+  .summary-strip strong { color: #ffffff; }
   .hero-top {
     display:flex;
     justify-content:space-between;
-    gap:20px;
+    gap:18px;
     align-items:flex-start;
   }
-  .title {
-    font-size: 2.65rem;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    font-weight: 650;
-    margin: 0 0 10px;
-  }
-  .subtitle {
-    color: var(--muted);
-    line-height: 1.65;
-    margin: 0;
-    max-width: 920px;
-    font-size: 0.93rem;
-  }
-  .summary-strip, .statusbar {
-    margin-top: 16px;
-    padding: 16px 18px;
-    border-radius: var(--radius-md);
-    background: var(--surface-container-low);
-    color: var(--muted);
-    font-size: 0.86rem;
-    line-height: 1.65;
-  }
-  .summary-strip strong { color: var(--text); }
-  .hero-badges, .chip-row, .legend {
+  .hero-badges, .chip-row {
     display:flex;
     gap:8px;
     flex-wrap:wrap;
+    justify-content:flex-end;
   }
-  .hero-badges { justify-content:flex-end; }
-  .hero-badge, .chip, .tag {
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background: var(--chip);
-    color: var(--secondary-text);
+  .hero-badge, .chip {
+    background: rgba(255,255,255,0.14);
+    border: none;
+    color: #f7f9ff;
     border-radius: 999px;
     padding: 7px 11px;
     font-size: 0.72rem;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
   }
-  .tag.good { background: #dff2e6; color: var(--good); }
-  .tag.warn { background: #f6ebcf; color: var(--warm); }
-  .tag.bad { background: #f5dfe2; color: var(--danger); }
-  .tag.info { background: #dbe9f7; color: var(--primary); }
-  .tabs {
-    display:flex;
-    gap: 10px;
-    margin-top: 18px;
-  }
-  .tab {
-    padding: 11px 16px;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--muted);
-    cursor:pointer;
-    user-select:none;
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .tab.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
-    color: #f7f7ff;
-    box-shadow: var(--shadow);
-  }
-  .hidden { display:none; }
-
   .controls {
     display: grid;
     grid-template-columns: repeat(5, minmax(0,1fr));
-    gap: 14px;
-    margin: 18px 0 22px;
-    background: var(--surface-container);
-  }
-  .controls > div {
-    background: rgba(255,255,255,0.58);
-    border-radius: var(--radius-md);
-    padding: 14px 14px 12px;
+    gap: 16px;
+    margin: 18px 0 24px;
+    background: var(--section);
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: none;
   }
   label {
     display:block;
-    font-size: 0.69rem;
-    line-height: 1.2;
-    color: var(--muted);
-    margin-bottom: 10px;
-    letter-spacing: 0.06em;
+    font-size: 0.68rem;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 700;
   }
   select, input[type="text"] {
     width: 100%;
-    padding: 10px 0 9px;
+    padding: 12px 0 10px;
     border-radius: 0;
     background: transparent;
     color: var(--text);
-    border: 0;
+    border: none;
     border-bottom: 1px solid var(--outline);
     outline: none;
-    font: inherit;
+    font-size: 0.94rem;
   }
-  select:focus, input[type="text"]:focus {
-    border-bottom: 2px solid var(--primary);
+  select:focus, input[type="text"]:focus { border-bottom: 2px solid var(--primary); }
+  .tabs { display:flex; gap: 10px; margin-top: 18px; }
+  .tab {
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    cursor:pointer;
+    user-select:none;
+    color: rgba(247,249,255,0.86);
+    font-weight: 600;
   }
+  .tab.active { background: rgba(255,255,255,0.2); color: #fff; }
+  .hidden { display:none; }
 
   .kpis {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 14px;
-    margin: 18px 0 22px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin: 20px 0 24px;
     align-items: stretch;
   }
   .kpi {
-    min-height: 134px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
+    background: var(--panel);
+    border: none;
+    border-radius: 16px;
+    padding: 22px 22px 20px;
+    min-height: 148px;
+    box-shadow: var(--shadow);
   }
-  .kpi .label, .war-metric .label {
+  .kpi .label {
     color: var(--muted);
-    font-size: 0.69rem;
-    line-height: 1.25;
-    letter-spacing: 0.06em;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    min-height: auto;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
+    font-weight: 700;
   }
   .kpi .value {
-    font-size: 3rem;
-    line-height: 0.95;
+    font-size: clamp(2.5rem, 4vw, 3.2rem);
+    font-weight: 600;
     letter-spacing: -0.05em;
-    font-weight: 560;
-    margin-top: 14px;
-    color: var(--text);
+    margin-top: 18px;
+    line-height: 1;
     word-break: break-word;
+    color: var(--text);
   }
-  .kpi .value.smallish { font-size: 1.4rem; line-height: 1.08; letter-spacing: -0.03em; }
-  .delta, .small, .meta, .section-sub, .footer {
+  .kpi .value.smallish { font-size: clamp(1.6rem, 2vw, 2rem); line-height: 1.05; }
+  .delta {
+    margin-top: 18px;
+    font-size: 0.88rem;
     color: var(--muted);
-    font-size: 0.82rem;
-    line-height: 1.55;
+    line-height: 1.45;
   }
-  .delta { margin-top: 14px; }
-  .delta.good, .good { color: var(--good); }
-  .delta.bad, .bad { color: var(--danger); }
-  .mono { font-variant-numeric: tabular-nums; }
+  .delta.good { color: var(--accent-2); }
+  .delta.bad { color: var(--danger); }
 
   .war-grid, .grid, .grid-3, .grid-4 {
     display:grid;
-    gap: 18px;
-    margin-bottom: 18px;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: start;
   }
   .war-grid { grid-template-columns: 1fr; }
-  .grid { grid-template-columns: 1fr 1fr; }
-  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .grid-3 { grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr); }
   .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
   .war-card {
-    background: linear-gradient(135deg, rgba(0,91,193,0.95), rgba(0,79,170,0.94));
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    border: none;
+    border-radius: 18px;
     padding: 22px;
-    color: #f7f7ff;
-    box-shadow: var(--shadow);
+    color: #f7f9ff;
+    box-shadow: 0 18px 36px rgba(0, 80, 170, 0.16);
   }
-  .war-card .small,
-  .war-card .label,
-  .war-card .section-sub,
-  .war-card .war-title { color: rgba(247,247,255,0.78); }
-  .war-card .value { color: #ffffff; }
-  .war-title, .section-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-  }
+  .war-title { font-size: 1rem; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.02em; }
   .war-metrics {
     display:grid;
     grid-template-columns: repeat(5, minmax(0,1fr));
-    gap: 12px;
+    gap: 14px;
   }
   .war-metric {
-    padding: 14px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: 14px;
     background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(12px);
+    border: none;
+    backdrop-filter: blur(10px);
   }
-  .war-metric .value {
-    font-size: 2rem;
-    line-height: 0.98;
-    letter-spacing: -0.04em;
-    font-weight: 560;
-    margin-top: 10px;
+  .war-metric .label {
+    font-size: 0.68rem;
+    color: rgba(247,249,255,0.76);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
-  .war-metric .small { margin-top: 10px; color: rgba(247,247,255,0.74); }
-
-  .chart { min-height: 340px; background: var(--surface-container-low); }
+  .war-metric .value { font-size: clamp(2rem, 2.5vw, 2.5rem); font-weight: 600; margin-top: 10px; letter-spacing: -0.05em; }
+  .war-metric .small { margin-top: 8px; color: rgba(247,249,255,0.82); }
+  .chart {
+    min-height: 340px;
+    background: var(--panel);
+  }
   .chart svg { width: 100%; height: 300px; display:block; }
-  .cards { display:grid; gap: 14px; }
-  .card { background: var(--surface-card); }
-  .article-title { font-size: 1.08rem; font-weight: 600; line-height: 1.4; margin-bottom: 10px; }
 
-  table { width:100%; border-collapse: separate; border-spacing: 0 10px; }
+  .section-title {
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-sub, .small {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .legend { display:flex; gap:10px; flex-wrap: wrap; margin-top: 14px; }
+  table { width:100%; border-collapse: separate; border-spacing: 0; }
   th, td {
     text-align:left;
-    padding: 10px 12px;
+    padding: 11px 10px;
+    border-bottom: none;
     vertical-align: top;
-    border: 0;
   }
+  tr + tr td { border-top: 1px solid var(--ghost); }
   th {
     color: var(--muted);
-    font-size: 0.69rem;
-    letter-spacing: 0.06em;
+    font-size: 0.68rem;
     text-transform: uppercase;
+    letter-spacing: 0.07em;
     position: sticky;
     top: 0;
-    background: var(--surface-card);
+    background: var(--section-2);
     z-index: 1;
   }
-  tbody tr, table tr:not(:first-child) {
-    background: var(--surface-card);
+  .table-wrap { max-height: 460px; overflow:auto; background: var(--section-2); border-radius: 14px; padding: 4px 0; }
+  .cards { display:grid; gap: 14px; }
+  .card {
+    background: var(--panel-soft);
+    border: none;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: none;
   }
-  .table-wrap {
-    max-height: 500px;
-    overflow:auto;
-    background: var(--surface-container-low);
-    border-radius: var(--radius-md);
-    padding: 6px;
+  .meta { color: var(--muted); font-size: 0.8rem; margin-bottom: 10px; line-height:1.55; }
+  .article-title { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: 10px; letter-spacing: -0.02em; color: var(--text); }
+  .tag {
+    display: inline-block;
+    margin-left: 8px;
+    margin-top: 6px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    border: none;
+    font-size: 0.68rem;
+    color: var(--text);
   }
-  .table-wrap table tr:not(:first-child) td:first-child { border-radius: 8px 0 0 8px; }
-  .table-wrap table tr:not(:first-child) td:last-child { border-radius: 0 8px 8px 0; }
-
+  .tag.good { background: rgba(71,125,88,0.12); color: var(--accent-2); }
+  .tag.warn { background: rgba(163,123,34,0.12); color: var(--accent-4); }
+  .tag.bad { background: rgba(182,78,86,0.12); color: var(--danger); }
+  .tag.info { background: rgba(0,91,193,0.10); color: var(--primary); }
   .spike-list, .gap-list { display:grid; gap:12px; }
   .spike-item, .gap-item {
-    background: var(--surface-container-low);
-    border-radius: 12px;
+    background: var(--section-2);
+    border: none;
+    border-radius: 14px;
     padding: 14px;
   }
-  .spike-title, .gap-title { font-weight: 600; }
-  .right { text-align:right; }
-  .center { text-align:center; }
   .heatmap-wrap {
     overflow:auto;
-    background: var(--surface-container-low);
-    border-radius: var(--radius-md);
-    padding: 6px;
+    background: var(--section-2);
+    border-radius: 14px;
+    padding: 8px;
   }
-  .heatmap-table td, .heatmap-table th { text-align:center; white-space:nowrap; }
-  .heatmap-table th:first-child, .heatmap-table td:first-child {
-    text-align:left;
-    position: sticky;
-    left: 0;
-    background: var(--surface-card);
-    z-index: 1;
+  .heatmap-table th, .heatmap-table td { text-align:center; white-space:nowrap; }
+  .heatmap-table th:first-child, .heatmap-table td:first-child { text-align:left; position:sticky; left:0; background: inherit; }
+  .footer-note {
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    text-align: center;
   }
-  .bar-track {
-    height: 8px;
-    border-radius: 999px;
-    background: rgba(0,91,193,0.08);
-    overflow: hidden;
-    margin-top: 10px;
-  }
-  .bar-fill {
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
-  }
-  .footer { padding: 4px 6px 18px; }
+  .mono { font-variant-numeric: tabular-nums; }
 
-  @media (max-width: 1440px) {
-    .controls { grid-template-columns: repeat(3, minmax(0,1fr)); }
-    .kpis { grid-template-columns: repeat(3, minmax(0,1fr)); }
-  }
   @media (max-width: 1200px) {
+    .controls { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .war-metrics { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid, .grid-3 { grid-template-columns: 1fr; }
-    .war-metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
   }
-  @media (max-width: 900px) {
-    .controls, .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .hero-top { display:block; }
-    .hero-badges { margin-top: 14px; justify-content:flex-start; }
-    .title { font-size: 2.1rem; }
-  }
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
     .wrap { padding: 16px; }
-    .controls, .kpis, .war-metrics { grid-template-columns: 1fr; }
-    .tab { padding: 10px 13px; }
-    .title { font-size: 1.85rem; }
+    .hero-top { flex-direction: column; }
+    .hero-badges { justify-content: flex-start; }
+    .controls { grid-template-columns: 1fr; }
+    .war-metrics { grid-template-columns: 1fr; }
+    .kpis { grid-template-columns: 1fr; }
+    .panel, .war-card, .controls { padding: 16px; }
+    .title { font-size: 1.8rem; }
   }
 </style>
 </head>
@@ -356,7 +343,7 @@
     <div class="hero-top">
       <div>
         <h1 class="title">Airline Recruitment Intelligence</h1>
-        <p class="subtitle">Live editorial dashboard for Wizz Air UK, Wizz Air, and competitor coverage with recruitment pressure scoring, momentum tracking, narrative comparison, and article-level intelligence.</p>
+        <p class="subtitle">Live dashboard for Wizz Air UK, Wizz Air, and competitor media coverage with recruitment-first analysis, momentum scoring, weighted signal quality, war-room comparison, and narrative gap tracking.</p>
       </div>
       <div class="hero-badges">
         <div class="hero-badge" id="badgeRows">0 rows</div>
@@ -373,15 +360,16 @@
 
   <div class="controls panel">
     <div>
-      <label>Company</label>
+      <label>Article airline</label>
       <select id="companyFilter"></select>
+      <div class="small">Applies to article views only.</div>
     </div>
     <div>
       <label>Theme / Lens</label>
       <select id="themeFilter"></select>
     </div>
     <div>
-      <label>Source</label>
+      <label>Publisher</label>
       <select id="sourceFilter"></select>
     </div>
     <div>
@@ -405,15 +393,14 @@
     </div>
   </div>
 
-    <div id="dashboard" class="tab-panel">
+  <div id="dashboard" class="tab-panel">
     <div class="war-grid">
       <div class="war-card">
         <div class="war-title">Wizz aggregate vs competitors</div>
-        <div class="section-sub">Core comparison is locked to Wizz Air UK + Wizz Air versus the rest of the field.</div>
         <div class="war-metrics">
           <div class="war-metric">
             <div class="label">Wizz aggregate</div>
-            <div class="value" id="warFocusName">Wizz aggregate</div>
+            <div class="value" id="warFocusName">Wizz</div>
             <div class="small" id="warFocusMeta">—</div>
           </div>
           <div class="war-metric">
@@ -440,25 +427,25 @@
       </div>
     </div>
 
-        <div class="kpis">
-      <div class="kpi"><div class="label">Articles</div><div class="value mono" id="kpiArticles">0</div><div class="delta" id="kpiArticlesDelta">–</div></div>
-      <div class="kpi"><div class="label">Weighted recruitment pressure</div><div class="value mono" id="kpiWeightedPressure">0</div><div class="delta" id="kpiWeightedPressureDelta">–</div></div>
-      <div class="kpi"><div class="label">Recruitment momentum score</div><div class="value mono" id="kpiMomentum">0</div><div class="delta" id="kpiMomentumDelta">–</div></div>
-      <div class="kpi"><div class="label">Wizz share</div><div class="value mono" id="kpiWizzShare">0%</div><div class="delta" id="kpiShareDelta">–</div></div>
-      <div class="kpi"><div class="label">Recruitment articles</div><div class="value mono" id="kpiRecruitArticles">0</div><div class="delta" id="kpiRecruitDelta">–</div></div>
-      <div class="kpi"><div class="label">Top recruitment event</div><div class="value smallish" id="kpiTopEvent">–</div><div class="delta" id="kpiTopEventDelta">–</div></div>
+    <div class="kpis">
+      <div class="kpi"><div class="label">Articles in scope</div><div class="value mono" id="kpiArticles">0</div><div class="delta" id="kpiArticlesDelta">–</div></div>
+      <div class="kpi"><div class="label">Market weighted pressure</div><div class="value mono" id="kpiWeightedPressure">0</div><div class="delta" id="kpiWeightedPressureDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz momentum score</div><div class="value mono" id="kpiMomentum">0</div><div class="delta" id="kpiMomentumDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz share of volume</div><div class="value mono" id="kpiWizzShare">0%</div><div class="delta" id="kpiShareDelta">–</div></div>
+      <div class="kpi"><div class="label">Wizz recruitment articles</div><div class="value mono" id="kpiRecruitArticles">0</div><div class="delta" id="kpiRecruitDelta">–</div></div>
+      <div class="kpi"><div class="label">Top Wizz recruitment event</div><div class="value smallish" id="kpiTopEvent">–</div><div class="delta" id="kpiTopEventDelta">–</div></div>
     </div>
 
     <div class="grid">
       <div class="panel chart">
         <div class="section-title">Monthly volume: Wizz aggregate vs competitors</div>
         <svg id="monthChart" viewBox="0 0 760 300"></svg>
-        <div class="small">Counts are based on the loaded article set and current filters.</div>
+        <div class="small">Counts use the main comparison scope and ignore the article-airline filter.</div>
       </div>
       <div class="panel chart">
         <div class="section-title">Monthly recruitment signal: Wizz aggregate vs competitors</div>
         <svg id="recruitMonthChart" viewBox="0 0 760 300"></svg>
-        <div class="small">YES recruitment signals only, comparing Wizz aggregate against the rest of the field.</div>
+        <div class="small">Counts only YES recruitment-signal articles in the main comparison scope.</div>
       </div>
     </div>
 
@@ -469,31 +456,31 @@
         <div class="legend" id="themeLegend"></div>
       </div>
       <div class="panel chart">
-        <div class="section-title">Daily trend: Wizz aggregate vs competitors</div>
+        <div class="section-title">Daily trend: last 7 days</div>
         <svg id="dailyChart" viewBox="0 0 760 300"></svg>
-        <div class="small">Article counts by day for Wizz aggregate versus all other airlines.</div>
+        <div class="small">Article counts by day for Wizz aggregate versus all other airlines in the main comparison scope.</div>
       </div>
     </div>
 
     <div class="grid">
       <div class="panel">
         <div class="section-title">Theme × airline heatmap</div>
-        <div class="section-sub">Highlights where recruitment narratives are concentrated.</div>
+        <div class="section-sub">Grouped comparison view showing where Wizz aggregate and competitors concentrate coverage.</div>
         <div class="heatmap-wrap" id="heatmapWrap"></div>
       </div>
       <div class="panel">
         <div class="section-title">Narrative gap detector</div>
-        <div class="section-sub">Shows where Wizz aggregate under-indexes or over-indexes versus the rest of the field.</div>
+        <div class="section-sub">Shows where Wizz aggregate over-indexes or under-indexes versus competitor recruitment narratives.</div>
         <div class="gap-list" id="gapList"></div>
       </div>
     </div>
-    <div class="grid-3">
+    <div class="grid">
       <div class="panel">
         <div class="section-title">Competitor leaderboard</div>
         <div class="table-wrap"><table id="leaderboardTable"></table></div>
       </div>
       <div class="panel">
-        <div class="section-title">Latest priority articles</div>
+        <div class="section-title">Latest priority articles (detail view)</div>
         <div class="cards" id="latestCards"></div>
       </div>
     </div>
@@ -502,7 +489,7 @@
   <div id="articles" class="tab-panel hidden">
     <div class="panel">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
-        <div style="font-weight:600; letter-spacing:-0.02em;">Filtered article list</div>
+        <div style="font-weight:800;">Article log (detail view)</div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <input type="text" id="searchBox" placeholder="Search title or description" style="max-width:340px;" />
           <select id="sortBy" style="max-width:240px;">
@@ -518,7 +505,7 @@
     </div>
   </div>
 
-  <div class="footer">Connected to Google Sheets live feed. Built as a single-file GitHub Pages dashboard.</div>
+  <div class="footer">Connected to a live Google Sheets feed. Main dashboard sections compare Wizz aggregate vs competitors; the article-airline filter only changes the detail views.</div>
 </div>
 
 <script>
@@ -611,6 +598,11 @@ function normalizeCompany(name, title, desc) {
   if (/tui/.test(combined)) return "TUI Airways";
   if (/loganair/.test(combined)) return "Loganair";
   return name || "Unknown";
+}
+
+function comparisonCompany(company) {
+  if (company === "Wizz Air UK" || company === "Wizz Air") return "Wizz aggregate";
+  return company || "Unknown";
 }
 
 function normalizeSignalSource(raw) {
@@ -822,7 +814,9 @@ function withinWindow(r, windowValue) {
   return true;
 }
 
-function getFilteredRows(includeSearch) {
+function getFilteredRows(includeSearch, options) {
+  options = options || {};
+  const ignoreCompany = !!options.ignoreCompany;
   const company = document.getElementById("companyFilter").value;
   const theme = document.getElementById("themeFilter").value;
   const source = document.getElementById("sourceFilter").value;
@@ -831,7 +825,7 @@ function getFilteredRows(includeSearch) {
   const q = ((document.getElementById("searchBox") && document.getElementById("searchBox").value) || "").trim().toLowerCase();
 
   let rows = allRows.filter(function(r) {
-    if (company !== "All Companies" && r.company !== company) return false;
+    if (!ignoreCompany && company !== "All Companies" && r.company !== company) return false;
     if (!matchesThemeFilter(r, theme)) return false;
     if (source !== "All Sources" && r.source !== source) return false;
     if (recruit !== "All" && r.recruitment_signal !== recruit) return false;
@@ -934,7 +928,7 @@ function lastNDates(n) {
 }
 
 function getFocusRows(rows) {
-  return rows.filter(function(r){ return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
+  return rows.filter(function(r){ return comparisonCompany(r.company) === "Wizz aggregate"; });
 }
 
 function getFocusLabel() {
@@ -942,12 +936,15 @@ function getFocusLabel() {
 }
 
 function getCompetitorRows(rows) {
-  return rows.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; });
+  return rows.filter(function(r){ return comparisonCompany(r.company) !== "Wizz aggregate"; });
 }
 
 function getTopCompetitorName(rows) {
   const counts = {};
-  rows.filter(function(r){ return r.company !== "Wizz Air UK" && r.company !== "Wizz Air"; }).forEach(function(r){ counts[r.company] = (counts[r.company] || 0) + 1; });
+  getCompetitorRows(rows).forEach(function(r){
+    const key = comparisonCompany(r.company);
+    counts[key] = (counts[key] || 0) + 1;
+  });
   const top = Object.entries(counts).sort(function(a,b){ return b[1] - a[1]; })[0];
   return top ? top[0] : null;
 }
@@ -955,7 +952,7 @@ function getTopCompetitorName(rows) {
 function getTopCompetitorRows(rows) {
   const topComp = getTopCompetitorName(rows);
   if (!topComp) return [];
-  return rows.filter(function(r){ return r.company === topComp; });
+  return rows.filter(function(r){ return comparisonCompany(r.company) === topComp; });
 }
 
 function weightedPressure(rows) {
@@ -987,7 +984,7 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
   if (!svg) return;
   svg.innerHTML = "";
   if (!labels.length) {
-    svg.innerHTML = '<text x="20" y="40" fill="#586064">No data for this filter.</text>'; 
+    svg.innerHTML = '<text x="20" y="40" fill="#a7b0d6">No data for this filter.</text>';
     return;
   }
   const width = 760, height = 300;
@@ -1002,11 +999,11 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
   const barW = Math.min(26, Math.max(10, groupW * 0.22));
   const showEvery = labels.length > 8 ? 2 : 1;
   let parts = [
-    '<line x1="' + margin.left + '" y1="' + (height - margin.bottom) + '" x2="' + (width - margin.right) + '" y2="' + (height - margin.bottom) + '" stroke="#cfd8dd"/>',
+    '<line x1="' + margin.left + '" y1="' + (height - margin.bottom) + '" x2="' + (width - margin.right) + '" y2="' + (height - margin.bottom) + '" stroke="#44518a"/>',
     '<rect x="' + margin.left + '" y="8" width="12" height="12" rx="3" fill="' + colorA + '"></rect>',
-    '<text x="' + (margin.left + 18) + '" y="18" font-size="11" fill="#586064">' + escapeHtml(legendA) + '</text>',
+    '<text x="' + (margin.left + 18) + '" y="18" font-size="11" fill="#c7d2fe">' + escapeHtml(legendA) + '</text>',
     '<rect x="' + (margin.left + 178) + '" y="8" width="12" height="12" rx="3" fill="' + colorB + '"></rect>',
-    '<text x="' + (margin.left + 196) + '" y="18" font-size="11" fill="#586064">' + escapeHtml(legendB) + '</text>'
+    '<text x="' + (margin.left + 196) + '" y="18" font-size="11" fill="#c7d2fe">' + escapeHtml(legendB) + '</text>'
   ];
   labels.forEach(function(label, i) {
     const centerX = margin.left + (i + offset) * groupW + groupW / 2;
@@ -1020,10 +1017,10 @@ function drawGroupedBarChart(svgId, labels, seriesA, seriesB, legendA, legendB, 
     const yB = height - margin.bottom - hB;
     parts.push('<rect x="' + xA + '" y="' + yA + '" width="' + barW + '" height="' + hA + '" rx="6" fill="' + colorA + '"></rect>');
     parts.push('<rect x="' + xB + '" y="' + yB + '" width="' + barW + '" height="' + hB + '" rx="6" fill="' + colorB + '"></rect>');
-    if (a > 0) parts.push('<text x="' + (xA + barW / 2) + '" y="' + Math.max(yA - 6, 14) + '" font-size="10" fill="#2b3437" text-anchor="middle">' + a + '</text>');
-    if (b > 0) parts.push('<text x="' + (xB + barW / 2) + '" y="' + Math.max(yB - 6, 14) + '" font-size="10" fill="#2b3437" text-anchor="middle">' + b + '</text>');
+    if (a > 0) parts.push('<text x="' + (xA + barW / 2) + '" y="' + Math.max(yA - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + a + '</text>');
+    if (b > 0) parts.push('<text x="' + (xB + barW / 2) + '" y="' + Math.max(yB - 6, 14) + '" font-size="10" fill="#eef2ff" text-anchor="middle">' + b + '</text>');
     if (showEvery === 1 || i % showEvery === 0 || i === labels.length - 1) {
-      parts.push('<text x="' + centerX + '" y="' + (height - margin.bottom + 16) + '" font-size="11" fill="#586064" text-anchor="middle">' + escapeHtml(label) + '</text>');
+      parts.push('<text x="' + centerX + '" y="' + (height - margin.bottom + 16) + '" font-size="11" fill="#c7d2fe" text-anchor="middle">' + escapeHtml(label) + '</text>');
     }
   });
   svg.innerHTML = parts.join("");
@@ -1037,10 +1034,10 @@ function drawHorizontalBars(svgId, dataMap) {
   legend.innerHTML = "";
   const entries = Object.entries(dataMap).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 8);
   if (!entries.length) {
-    svg.innerHTML = '<text x="20" y="40" fill="#586064">No data for this filter.</text>'; 
+    svg.innerHTML = '<text x="20" y="40" fill="#a7b0d6">No data for this filter.</text>';
     return;
   }
-  const colors = ["#005bc1", "#4d89d5", "#8db2e5", "#b9d0ee", "#cfe6f2", "#7da7df", "#dde8f1", "#5f86b8"];
+  const colors = ["#7dd3fc", "#86efac", "#f9a8d4", "#fde68a", "#c4b5fd", "#fdba74", "#93c5fd", "#fca5a5"];
   const width = 760, height = 300;
   const margin = { top: 20, right: 20, bottom: 20, left: 220 };
   const innerW = width - margin.left - margin.right;
@@ -1051,9 +1048,9 @@ function drawHorizontalBars(svgId, dataMap) {
     const y = margin.top + i * rowH + 10;
     const w = (e[1] / max) * innerW;
     const color = colors[i % colors.length];
-    parts.push('<text x="' + (margin.left - 10) + '" y="' + (y + 12) + '" font-size="12" fill="#586064" text-anchor="end">' + escapeHtml(e[0]) + '</text>');
+    parts.push('<text x="' + (margin.left - 10) + '" y="' + (y + 12) + '" font-size="12" fill="#c7d2fe" text-anchor="end">' + escapeHtml(e[0]) + '</text>');
     parts.push('<rect x="' + margin.left + '" y="' + y + '" width="' + w + '" height="18" rx="8" fill="' + color + '"></rect>');
-    parts.push('<text x="' + (margin.left + w + 8) + '" y="' + (y + 13) + '" font-size="11" fill="#2b3437">' + e[1] + '</text>');
+    parts.push('<text x="' + (margin.left + w + 8) + '" y="' + (y + 13) + '" font-size="11" fill="#eef2ff">' + e[1] + '</text>');
     legend.innerHTML += '<span class="chip">' + escapeHtml(e[0]) + ' · ' + e[1] + '</span>';
   });
   svg.innerHTML = parts.join("");
@@ -1091,36 +1088,6 @@ function computeSpikeRows(rows) {
   }).filter(function(x){ return x.isSpike; }).sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,5);
 }
 
-function renderSpikes(rows) {
-  const wrap = document.getElementById("spikeList");
-  if (!wrap) return;
-  const spikes = computeSpikeRows(rows);
-  if (!spikes.length) {
-    wrap.innerHTML = '<div class="muted">No unusual spike days detected from current data.</div>';
-    return;
-  }
-  wrap.innerHTML = spikes.map(function(e){
-    return '<div class="spike-item">' +
-      '<div class="spike-title">' + escapeHtml(e.date) + ' · ' + e.count + ' articles</div>' +
-      '<div class="small">Recruitment: ' + e.recruit + ' · Weighted pressure: ' + e.weighted + '</div>' +
-      '<div class="small">Top airline: ' + escapeHtml(e.topCompany) + ' · Top theme: ' + escapeHtml(e.topTheme) + '</div>' +
-    '</div>';
-  }).join('');
-}
-
-function renderSources(rows) {
-  const table = document.getElementById("sourcesTable");
-  if (!table) return;
-  const entries = Object.entries(countBy(rows, function(r) { return r.source; })).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
-  table.innerHTML = '<tr><th>Source</th><th class="right">Articles</th><th class="right">Recruitment</th><th class="right">Weighted</th></tr>' +
-    entries.map(function(item) {
-      const sourceRows = rows.filter(function(r){ return r.source === item[0]; });
-      const recruit = sourceRows.filter(function(r){ return r.recruitment_signal === "YES"; }).length;
-      const weight = weightedPressure(sourceRows);
-      return '<tr><td>' + escapeHtml(item[0]) + '</td><td class="right mono">' + item[1] + '</td><td class="right mono">' + recruit + '</td><td class="right mono">' + weight + '</td></tr>';
-    }).join("");
-}
-
 function priorityTag(flag) {
   if (flag === "Critical") return '<span class="tag bad">Critical</span>';
   if (flag === "High") return '<span class="tag warn">High</span>';
@@ -1133,9 +1100,10 @@ function renderLatest(rows) {
   if (!wrap) return;
   wrap.innerHTML = rows.slice(0, 6).map(function(r) {
     const recruitTag = r.recruitment_signal === "YES" ? '<span class="tag good">Recruitment</span>' : '';
+    const signalTag = '<span class="tag warn">' + escapeHtml(r.signal_source) + '</span>';
     const eventTag = r.recruitment_event && r.recruitment_event !== "Non-recruitment" ? '<span class="tag info">' + escapeHtml(r.recruitment_event) + '</span>' : '';
     return '<div class="card">' +
-      '<div class="meta">' + escapeHtml(r.company) + ' · ' + escapeHtml(r.source) + ' · ' + escapeHtml(r.published_at) + ' · ' + escapeHtml(r.theme) + recruitTag + eventTag + priorityTag(r.priority_flag) + '</div>' +
+      '<div class="meta">' + escapeHtml(r.company) + ' · ' + escapeHtml(r.source) + ' · ' + escapeHtml(r.published_at) + ' · ' + escapeHtml(r.theme) + recruitTag + signalTag + eventTag + priorityTag(r.priority_flag) + '</div>' +
       '<div class="article-title"><a href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.title) + '</a></div>' +
       '<div class="small">Priority score: ' + r.priority_score + ' · Event: ' + escapeHtml(r.recruitment_event) + ' · Quality: ' + escapeHtml(r.event_quality) + '</div>' +
       '<div class="small" style="margin-top:8px;">' + escapeHtml(r.description || "") + '</div>' +
@@ -1165,17 +1133,21 @@ function renderArticles(rows) {
 }
 
 function buildLeaderboardRows(rows) {
-  const companyCounts = countBy(rows, function(r){ return r.company; });
-  const recruitCounts = countBy(rows.filter(function(r){ return r.recruitment_signal === "YES"; }), function(r){ return r.company; });
+  const grouped = {};
+  rows.forEach(function(r){
+    const key = comparisonCompany(r.company);
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(r);
+  });
   const total = rows.length || 1;
   const focusRows = getFocusRows(rows);
   const focusCount = focusRows.length;
-  return Object.keys(companyCounts).map(function(company){
-    const companyRows = rows.filter(function(r){ return r.company === company; });
-    const totalCount = companyCounts[company] || 0;
-    const recruitCount = recruitCounts[company] || 0;
+  return Object.keys(grouped).map(function(company){
+    const companyRows = grouped[company];
+    const totalCount = companyRows.length;
+    const recruitCount = companyRows.filter(function(r){ return r.recruitment_signal === "YES"; }).length;
     const share = (totalCount / total) * 100;
-    const gapVsFocus = (focusCount - totalCount);
+    const gapVsFocus = totalCount - focusCount;
     return {
       company: company,
       total: totalCount,
@@ -1186,7 +1158,11 @@ function buildLeaderboardRows(rows) {
       momentum: momentumScoreForRows(companyRows, rows),
       gapVsFocus: gapVsFocus
     };
-  }).sort(function(a,b){ return b.momentum - a.momentum || b.total - a.total; });
+  }).sort(function(a,b){
+    if (a.company === "Wizz aggregate") return -1;
+    if (b.company === "Wizz aggregate") return 1;
+    return b.momentum - a.momentum || b.total - a.total;
+  });
 }
 
 function renderLeaderboard(rows) {
@@ -1201,7 +1177,7 @@ function renderLeaderboard(rows) {
   table.innerHTML =
     '<tr><th>Airline</th><th class="right">Articles</th><th class="right">Share</th><th class="right">Recruitment</th><th class="right">Weighted</th><th class="right">Momentum</th><th class="right">Gap vs ' + escapeHtml(focusLabel) + '</th></tr>' +
     data.map(function(r){
-      const gapCls = r.gapVsFocus >= 0 ? 'good' : 'bad';
+      const gapCls = r.gapVsFocus <= 0 ? 'good' : 'bad';
       return '<tr>' +
         '<td>' + escapeHtml(r.company) + '</td>' +
         '<td class="right mono">' + r.total + '</td>' +
@@ -1221,14 +1197,14 @@ function renderHeatmap(rows) {
   const themes = ["Recruitment"].concat(uniqueSorted(rows.map(function(r){ return r.theme; }).filter(function(t){ return t !== "Recruitment"; })).slice(0, 6));
   const maxCell = Math.max.apply(null, airlines.flatMap(function(airline){
     return themes.map(function(theme){
-      return rows.filter(function(r){ return r.company === airline && matchesThemeFilter(r, theme); }).length;
+      return rows.filter(function(r){ return comparisonCompany(r.company) === airline && matchesThemeFilter(r, theme); }).length;
     });
   }).concat([1]));
-  let html = '<table class="heatmap-table"><tr><th>Airline</th>' + themes.map(function(t){ return '<th>' + escapeHtml(t) + '</th>'; }).join("") + '</tr>';
+  let html = '<table class="heatmap-table"><tr><th>Airline group</th>' + themes.map(function(t){ return '<th>' + escapeHtml(t) + '</th>'; }).join("") + '</tr>';
   airlines.forEach(function(airline){
     html += '<tr><td>' + escapeHtml(airline) + '</td>';
     themes.forEach(function(theme){
-      const count = rows.filter(function(r){ return r.company === airline && matchesThemeFilter(r, theme); }).length;
+      const count = rows.filter(function(r){ return comparisonCompany(r.company) === airline && matchesThemeFilter(r, theme); }).length;
       const intensity = count / maxCell;
       const bg = 'rgba(125, 211, 252, ' + (0.08 + intensity * 0.42).toFixed(2) + ')';
       html += '<td style="background:' + bg + ';">' + count + '</td>';
@@ -1301,7 +1277,6 @@ function renderWarPanel(rows) {
 
 function buildExecutiveSummary(rows) {
   const focusRows = getFocusRows(rows);
-  const focusLabel = getFocusLabel();
   const topComp = getTopCompetitorName(rows);
   const topCompRows = getTopCompetitorRows(rows);
   const focusRecruit = focusRows.filter(function(r){ return r.recruitment_signal === "YES"; });
@@ -1311,69 +1286,48 @@ function buildExecutiveSummary(rows) {
   const compMomentum = momentumScoreForRows(topCompRows, rows);
   const topEvent = Object.entries(countBy(focusRecruit, function(r){ return r.recruitment_event; })).sort(function(a,b){ return b[1] - a[1]; })[0];
   const leadVerb = focusMomentum >= compMomentum ? "ahead of" : "behind";
-  return '<strong>Executive summary:</strong> ' + escapeHtml(focusLabel) + ' holds ' + formatPct(share) + ' of recruitment signal share in the current window, with a momentum score of <strong>' + focusMomentum + '</strong>, ' + escapeHtml(leadVerb) + ' ' + escapeHtml(topComp || "the field") + '. Its strongest visible recruitment narrative is <strong>' + escapeHtml(topEvent ? topEvent[0] : "no dominant event") + '</strong>, while weighted pressure stands at <strong>' + weightedPressure(focusRows) + '</strong>.';
+  return '<strong>Executive summary:</strong> Wizz aggregate holds ' + formatPct(share) + ' of recruitment-signal coverage in the current comparison scope and is ' + escapeHtml(leadVerb) + ' ' + escapeHtml(topComp || "the field") + ' on momentum (' + focusMomentum + ' vs ' + compMomentum + '). The strongest Wizz recruitment narrative is <strong>' + escapeHtml(topEvent ? topEvent[0] : 'no dominant event') + '</strong>, with weighted pressure at <strong>' + weightedPressure(focusRows) + '</strong>.';
 }
 
 function renderDashboard() {
-  const rows = getFilteredRows(false);
-  const rowsForArticles = getFilteredRows(true);
-  const s = summarize(rows);
+  const comparisonRows = getFilteredRows(false, { ignoreCompany: true });
+  const rowsForArticles = getFilteredRows(true, { ignoreCompany: false });
+  const s = summarize(comparisonRows);
 
-  const focusRows = getFocusRows(rows);
-  const otherRows = getCompetitorRows(rows);
-  const wizzRows = rows.filter(function(r) { return r.company === "Wizz Air UK" || r.company === "Wizz Air"; });
-  const recruitRows = rows.filter(function(r) { return r.recruitment_signal === "YES"; });
-  const highIntentRecruitRows = recruitRows.filter(function(r){ return r.event_quality === "High-intent"; });
-  const manualRows = rows.filter(function(r){ return r.signal_source === "Manual"; });
-  const inferredRows = rows.filter(function(r){ return r.signal_source === "Inferred"; });
-
-  const companyCounts = countBy(rows, function(r) { return r.company; });
-  let topName = "–", topVal = 0;
-  Object.entries(companyCounts).forEach(function(entry) {
-    if (entry[1] > topVal) { topVal = entry[1]; topName = entry[0]; }
-  });
-
-  const topCompetitor = getTopCompetitorName(rows);
-  const topCompetitorRows = getTopCompetitorRows(rows);
-  const focusLabel = getFocusLabel();
-  const focusCount = focusRows.length;
-  const compCount = topCompetitorRows.length;
-  const focusRecruit = focusRows.filter(function(r){ return r.recruitment_signal === "YES"; });
-  const compRecruit = topCompetitorRows.filter(function(r){ return r.recruitment_signal === "YES"; });
-
-  const weighted = weightedPressure(rows);
-  const focusMomentum = momentumScoreForRows(focusRows, rows);
+  const focusRows = getFocusRows(comparisonRows);
+  const otherRows = getCompetitorRows(comparisonRows);
+  const topCompetitorRows = getTopCompetitorRows(comparisonRows);
+  const focusRecruit = focusRows.filter(function(r) { return r.recruitment_signal === "YES"; });
+  const weighted = weightedPressure(comparisonRows);
+  const focusWeighted = weightedPressure(focusRows);
+  const focusMomentum = momentumScoreForRows(focusRows, comparisonRows);
   const endCurr = dateDaysAgo(0), startCurr = dateDaysAgo(6), endPrev = dateDaysAgo(7), startPrev = dateDaysAgo(13);
-  const current7 = rowsBetween(rows, startCurr, endCurr);
-  const previous7 = rowsBetween(rows, startPrev, endPrev);
+  const current7 = rowsBetween(comparisonRows, startCurr, endCurr);
+  const previous7 = rowsBetween(comparisonRows, startPrev, endPrev);
   const currentFocus7 = getFocusRows(current7);
   const previousFocus7 = getFocusRows(previous7);
   const currentWeighted7 = weightedPressure(current7);
   const previousWeighted7 = weightedPressure(previous7);
-  const currentMomentum7 = momentumScoreForRows(currentFocus7, current7.length ? current7 : rows);
-  const previousMomentum7 = momentumScoreForRows(previousFocus7, previous7.length ? previous7 : rows);
+  const currentMomentum7 = momentumScoreForRows(currentFocus7, current7.length ? current7 : comparisonRows);
+  const previousMomentum7 = momentumScoreForRows(previousFocus7, previous7.length ? previous7 : comparisonRows);
 
-  const focusShare = rows.length ? (focusCount / rows.length) * 100 : 0;
-  const highIntentShare = recruitRows.length ? (highIntentRecruitRows.length / recruitRows.length) * 100 : 0;
-  const priorityHigh = rows.filter(function(r){ return r.priority_flag === "Critical" || r.priority_flag === "High"; }).length;
-  const topTheme = s.topTheme;
-  const eventCounts = Object.entries(countBy(recruitRows, function(r){ return r.recruitment_event; })).sort(function(a,b){ return b[1] - a[1]; });
-  const topEvent = eventCounts[0];
+  const focusShare = comparisonRows.length ? (focusRows.length / comparisonRows.length) * 100 : 0;
+  const topEvent = Object.entries(countBy(focusRecruit, function(r){ return r.recruitment_event; })).sort(function(a,b){ return b[1] - a[1]; })[0];
 
-  document.getElementById("execSummary").innerHTML = buildExecutiveSummary(rows);
+  document.getElementById("execSummary").innerHTML = buildExecutiveSummary(comparisonRows);
   document.getElementById("kpiArticles").textContent = s.articles;
   document.getElementById("kpiWeightedPressure").textContent = weighted;
   document.getElementById("kpiMomentum").textContent = focusMomentum;
-  document.getElementById("kpiWizzShare").textContent = formatPct((wizzRows.length / (rows.length || 1)) * 100);
-  document.getElementById("kpiRecruitArticles").textContent = recruitRows.length;
+  document.getElementById("kpiWizzShare").textContent = formatPct(focusShare);
+  document.getElementById("kpiRecruitArticles").textContent = focusRecruit.length;
   document.getElementById("kpiTopEvent").textContent = topEvent ? topEvent[0] : "–";
-  document.getElementById("kpiTopEventDelta").textContent = topEvent ? (topEvent[1] + " articles") : "–";
+  document.getElementById("kpiTopEventDelta").textContent = topEvent ? (topEvent[1] + " Wizz articles") : "–";
 
   setDelta("kpiArticlesDelta", deltaLabel(current7.length, previous7.length));
   setDelta("kpiWeightedPressureDelta", deltaLabel(currentWeighted7, previousWeighted7));
   setDelta("kpiMomentumDelta", deltaLabel(currentMomentum7, previousMomentum7));
   setDelta("kpiShareDelta", deltaLabel((currentFocus7.length / Math.max(1, current7.length)) * 100, (previousFocus7.length / Math.max(1, previous7.length)) * 100, " pts"));
-  setDelta("kpiRecruitDelta", deltaLabel(current7.filter(function(r){ return r.recruitment_signal === "YES"; }).length, previous7.filter(function(r){ return r.recruitment_signal === "YES"; }).length));
+  setDelta("kpiRecruitDelta", deltaLabel(currentFocus7.filter(function(r){ return r.recruitment_signal === "YES"; }).length, previousFocus7.filter(function(r){ return r.recruitment_signal === "YES"; }).length));
 
   const focusMonthCounts = countBy(focusRows, function(r) { return r.month; });
   const otherMonthCounts = countBy(otherRows, function(r) { return r.month; });
@@ -1383,21 +1337,21 @@ function renderDashboard() {
   const allMonths = generateMonthRange(rawMonths);
   const monthLabels = allMonths.map(function(m) { return formatMonthLabel(m); });
 
-  drawGroupedBarChart("monthChart", monthLabels, allMonths.map(function(m) { return focusMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherMonthCounts[m] || 0; }), focusLabel, "Competitors", "#005bc1", "#cfe6f2");
-  drawGroupedBarChart("recruitMonthChart", monthLabels, allMonths.map(function(m) { return focusRecruitMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherRecruitMonthCounts[m] || 0; }), focusLabel + " recruitment", "Competitor recruitment", "#004faa", "#8db2e5");
+  drawGroupedBarChart("monthChart", monthLabels, allMonths.map(function(m) { return focusMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherMonthCounts[m] || 0; }), "Wizz aggregate", "Competitors", "#7dd3fc", "#86efac");
+  drawGroupedBarChart("recruitMonthChart", monthLabels, allMonths.map(function(m) { return focusRecruitMonthCounts[m] || 0; }), allMonths.map(function(m) { return otherRecruitMonthCounts[m] || 0; }), "Wizz recruitment", "Competitor recruitment", "#fde68a", "#f9a8d4");
 
   const last7 = lastNDates(7);
   const focusByDay = countBy(focusRows.filter(function(r){ return last7.indexOf(r.published_at) > -1; }), function(r){ return r.published_at; });
   const otherByDay = countBy(otherRows.filter(function(r){ return last7.indexOf(r.published_at) > -1; }), function(r){ return r.published_at; });
-  drawGroupedBarChart("dailyChart", last7.map(function(d){ return d.slice(5); }), last7.map(function(d){ return focusByDay[d] || 0; }), last7.map(function(d){ return otherByDay[d] || 0; }), focusLabel, "Competitors", "#005bc1", "#8db2e5");
+  drawGroupedBarChart("dailyChart", last7.map(function(d){ return d.slice(5); }), last7.map(function(d){ return focusByDay[d] || 0; }), last7.map(function(d){ return otherByDay[d] || 0; }), "Wizz aggregate", "Competitors", "#7dd3fc", "#f9a8d4");
 
   drawHorizontalBars("themeChart", s.themeCounts);
-  renderLeaderboard(rows);
+  renderLeaderboard(comparisonRows);
   renderLatest(rowsForArticles);
   renderArticles(rowsForArticles);
-  renderHeatmap(rows);
-  renderNarrativeGaps(rows);
-  renderWarPanel(rows);
+  renderHeatmap(comparisonRows);
+  renderNarrativeGaps(comparisonRows);
+  renderWarPanel(comparisonRows);
 }
 
 async function loadData() {
